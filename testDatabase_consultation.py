@@ -65,6 +65,13 @@ def SearchConsultation(ClincianID, PatientID, DateConsultation):
 
 #! Insert a new consultation in the database
 def ConsultationInsert(ClinicianID, PatientID, DateConsultation):
+    """Insert a new consultation in the database
+
+    Args:
+        ClinicianID (str): ID of the Clinician
+        PatientID (str): ID of the patient
+        DateConsultation (str): Date fo the consultation
+    """
     request_insert="INSERT INTO Consultation (idConsultation, idC, idP, DateConsultation) Values(?,?,?,?)"
     
     #? Check if the consultation exist
@@ -72,8 +79,6 @@ def ConsultationInsert(ClinicianID, PatientID, DateConsultation):
         #! Create a connection to the database
         conn = sqlite3.connect(Database_path)
         conn.execute("PRAGMA foreign_keys = ON")
-        
-        
         #* Create a cursor
         cursor = conn.cursor()
         #! Create a new ConsultationID
@@ -87,13 +92,29 @@ def ConsultationInsert(ClinicianID, PatientID, DateConsultation):
         except:
             print("There is a mistake in the information, check if Consultation's ID or Patient's ID are correct!!!!")       
         conn.close()
+#! Show all the consultation for a patient
+def PatientConsultation(PatientID):
+    data = None
+    request_consultations = "SELECT * FROM Consultation where idP = ?"
+    #! Create a connection
+    conn = sqlite3.connect(Database_path)
+    cursor = conn.cursor()
+    cursor.execute(request_consultations, (PatientID, ))
+    data = cursor.fetchall()
+    if data is None:
+        print("There is no consultation for this patient")
+    return data
         
-"""
-! Les fonction qui marchent :
-    - SearchConsultation("CS000")
-    - CreateIdConsultation()
-    - ConsultationInsert('C000', 'P2001','20/05/2020')
-"""
+if __name__ =="__main__":
+    
+    """
+    ! Les fonction qui marchent :
+        - SearchConsultation("CS000")
+        - CreateIdConsultation()
+        - ConsultationInsert('C000', 'P2001','20/05/2020')
+        - PatientConsultation('P000')
+    """
 
+    
 
 
