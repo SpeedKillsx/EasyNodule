@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-import os
+
 
 Database_path = "NoduleDatabase.db"
 #* Method Auto Increment the ConsultationID
@@ -100,9 +100,12 @@ def PatientConsultation(PatientID):
     conn = sqlite3.connect(Database_path)
     cursor = conn.cursor()
     cursor.execute(request_consultations, (PatientID, ))
+    
     data = cursor.fetchall()
+    conn.close()
     if data is None:
         print("There is no consultation for this patient")
+    
     return data
         
 if __name__ =="__main__":
@@ -114,6 +117,7 @@ if __name__ =="__main__":
         - ConsultationInsert('C000', 'P2001','20/05/2020')
         - PatientConsultation('P000')
     """
+    
 
     
 
