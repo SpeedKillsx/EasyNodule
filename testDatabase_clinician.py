@@ -102,17 +102,22 @@ def ClinicianInsert(NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, Usern
         conn.close()
 #? This method is to modify the information of a clinician
 def ClinicianModify(idC, NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, UsernameC):
-    conn = sqlite3.connect(Database_path)
-    cursor = conn.cursor()
-    update_request = "UPDATE Clinician set NameC = ?, BirthdayC = ?, WilayaC = ?, Hospital = ?, Grade = ?, PasswordC = ?, UsernameC = ? where idC = ?"
-    birth = BirthdayC.split('/')
-    day = int(birth[0])
-    month = int(birth[1])
-    year  = int(birth[2])
-    BirthdayC = datetime.date(year, month, day)
-    cursor.execute(update_request, (NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, UsernameC, idC))
-    conn.commit()
-    conn.close()
+    if ClinicianResearch(UsernameC) == 1:
+        conn = sqlite3.connect(Database_path)
+        cursor = conn.cursor()
+        update_request = "UPDATE Clinician set NameC = ?, BirthdayC = ?, WilayaC = ?, Hospital = ?, Grade = ?, PasswordC = ?, UsernameC = ? where idC = ?"
+        birth = BirthdayC.split('/')
+        day = int(birth[0])
+        month = int(birth[1])
+        year  = int(birth[2])
+        BirthdayC = datetime.date(year, month, day)
+        cursor.execute(update_request, (NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, UsernameC, idC))
+        conn.commit()
+        conn.close()
+        print("Clinician Updated")
+    else:
+        print("Can't update a user that doesn't exist!!!!\nCheck your username")
+        
 
 #? This method is to write the actual information of a clinician, we can use it in the interface
 def PrintActualClinicianInfo(IDClinian):
@@ -164,3 +169,4 @@ for l in v:
     NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, UsernameC = l
     ClinicianInsert(NameC,BirthdayC, WilayaC,Hospital,Grade,PasswordC, UsernameC)
 """
+#ClinicianModify('C000','Bouchama Benamar', '06/04/1978', 'Tipaza', 'CHU de Blida', 'Radiologue', 'f5G5c&3ViXe', 'bouchama_benamar')

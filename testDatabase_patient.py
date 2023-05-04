@@ -1,13 +1,14 @@
 import sqlite3
 import datetime
 Database_path = "NoduleDatabase.db"
+
 def CreateIdp():
     """
     Create an automatic ID for a new patient if he doesn't exist already in the database.
     The new ID can be in one of the 3 categories:
-        Category 1: The patient was added with the 10th first clinician in the app, the ID would be between P000 and C009
-        Category 2: The patient was added with the 100th first clinician in the app, the ID would be between P010 and C099
-        Category 3: The patient was added the rest of possible IDs in the App, the ID would be between P0100 and CXXX
+        Category 1: The patient was added with the 10th first patient in the app, the ID would be between P000 and P009
+        Category 2: The patient was added with the 100th first patient in the app, the ID would be between P010 and P099
+        Category 3: The patient was added the rest of possible IDs in the App, the ID would be between P0100 and PXXX
     Returns:
         str: the new ID
     """
@@ -40,7 +41,7 @@ def CreateIdp():
 #? Methode that search for a patient
 def PatientResearchPhoneName(PhonePatient,NamePatient ):
     """
-    Search if a patient with a given PatientEmail and Patient Name existe in the database
+    Search if a patient with a given Patient's Email and Patient's Name existe in the database
     Args:
         PhonePatient (str): The phone number of the patient\n
         NamePatient  (str): The name of the patient
@@ -123,7 +124,7 @@ def PatientSearchByID(PatientID):
         exit = 1
     conn.close()
     return exit
-        
+
 #? This method is to modify the information of a patient
 def PatientModify(idP, NameP,BirthdayP,WilayaP,Sexe,Allergies,Smoking,MedHistory,CancerFamilly,EmailP,PhoneP):
     if PatientSearchByID(idP) == 1:
