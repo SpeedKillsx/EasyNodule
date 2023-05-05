@@ -107,7 +107,26 @@ def PatientConsultation(PatientID):
         print("There is no consultation for this patient")
     
     return data
-        
+def ConsultationModify(ConsultationID, ClinicianID,PatientID, DateConsultation, MedicalObservation):
+    #* Check if the connection existe
+    #! The consultation existe, we can modify it
+    update_request = "UPDATE Consultation set idC = ?,idP = ?, DateConsultation = ?, MedicalObservation = ? where idConsultation = ?"
+    conn = sqlite3.connect(Database_path)
+    conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA primary_keys = ON")
+    day, month, year = DateConsultation.split('/')
+    cursor = conn.cursor()
+    try:
+        cursor.execute(update_request, (ClinicianID, PatientID, datetime.date(int(year), int(month), int(day)),MedicalObservation, ConsultationID))
+        conn.commit()
+        if cursor.rowcount < 1:
+            print("There is no consultation with this ID, please check your identifiant")
+        else:
+            print("Consultation Updated")
+    except sqlite3.IntegrityError:
+        print("Verify if your id/patient's ID are correct")
+    conn.close()
+    #print("Check the your ID or the ID of the patient.")
 if __name__ =="__main__":
     
     """
@@ -119,7 +138,7 @@ if __name__ =="__main__":
     """
     #ConsultationInsert('C024', 'P005','2/08/2020')
     #print(PatientConsultation('P000'))
-    ConsultationInsert('C003', 'P003','10/08/2020', 'Presence of a tumor')
+    ConsultationModify('CS001','C000', 'P001','2/08/2020', 'Very Good tests')
     
 
     
