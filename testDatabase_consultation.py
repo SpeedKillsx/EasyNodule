@@ -64,7 +64,7 @@ def SearchConsultation(ClincianID, PatientID, DateConsultation):
     return exist
 
 #! Insert a new consultation in the database
-def ConsultationInsert(ClinicianID, PatientID, DateConsultation):
+def ConsultationInsert(ClinicianID, PatientID, DateConsultation, MedicalObservation):
     """Insert a new consultation in the database
 
     Args:
@@ -72,7 +72,7 @@ def ConsultationInsert(ClinicianID, PatientID, DateConsultation):
         PatientID (str): ID of the patient
         DateConsultation (str): Date fo the consultation
     """
-    request_insert="INSERT INTO Consultation (idConsultation, idC, idP, DateConsultation) Values(?,?,?,?)"
+    request_insert="INSERT INTO Consultation (idConsultation, idC, idP, DateConsultation, MedicalObservation) Values(?,?,?,?,?)"
     
     #? Check if the consultation exist
     if SearchConsultation(ClinicianID,PatientID, DateConsultation) == -1: #* The consultation doesn't existe
@@ -86,7 +86,7 @@ def ConsultationInsert(ClinicianID, PatientID, DateConsultation):
         #! Split the date
         day, month, year = DateConsultation.split('/')
         try:
-            cursor.execute(request_insert, (ConsultationID, ClinicianID, PatientID, datetime.date(int(year), int(month), int(day))))
+            cursor.execute(request_insert, (ConsultationID, ClinicianID, PatientID, datetime.date(int(year), int(month), int(day)), MedicalObservation))
             conn.commit()
             print("Consultation is added")
         except:
@@ -117,6 +117,9 @@ if __name__ =="__main__":
         - ConsultationInsert('C000', 'P2001','20/05/2020')
         - PatientConsultation('P000')
     """
+    #ConsultationInsert('C024', 'P005','2/08/2020')
+    #print(PatientConsultation('P000'))
+    ConsultationInsert('C003', 'P003','10/08/2020', 'Presence of a tumor')
     
 
     

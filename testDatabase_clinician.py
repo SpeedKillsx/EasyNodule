@@ -118,7 +118,19 @@ def ClinicianModify(idC, NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, 
     else:
         print("Can't update a user that doesn't exist!!!!\nCheck your username")
         
-
+#? Delete Clinician
+def ClinicianDelete(UsernameClinician):
+    delete_request = "DELETE FROM Clinician where UsernameC = ?"
+    if ClinicianResearch(UsernameClinician) == 1:
+        conn = sqlite3.connect(Database_path)
+        conn.execute("PRAGMA foreign_keys = ON")
+        cursor = conn.cursor()
+        cursor.execute(delete_request, (UsernameClinician, ))
+        conn.commit()
+        conn.close()
+        print('Account is deleted')
+    else:
+        print("There no account with this username")
 #? This method is to write the actual information of a clinician, we can use it in the interface
 def PrintActualClinicianInfo(IDClinian):
     #*Create a connection to the database
@@ -170,3 +182,5 @@ for l in v:
     ClinicianInsert(NameC,BirthdayC, WilayaC,Hospital,Grade,PasswordC, UsernameC)
 """
 #ClinicianModify('C000','Bouchama Benamar', '06/04/1978', 'Tipaza', 'CHU de Blida', 'Radiologue', 'f5G5c&3ViXe', 'bouchama_benamar')
+ClinicianInsert("Clin24","25/12/1982", 'a','Hospital','Grade','PasswordC', 'user24')
+#ClinicianDelete('user24')

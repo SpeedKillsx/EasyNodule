@@ -161,4 +161,5 @@ PatientModify('P002','Nour El Imane Meziani', '29/11/1999', 'Tizi Ouzou', 'Femal
 """
 #PatientSearchByID('P04')
 #PatientInsert('Nour El Imane Meziani', '29/11/1999', 'Tizi Ouzou', 'Male', 'Poussiere, Acariens', 0, 'Migraine', 0, 'nour@example.com', '0555765432')
-PatientModify('P002','Nour El Imane Meziani', '29/11/1999', 'Tizi Ouzou', 'Female', 'Acariens, Poussiere', 0, 'None', 0, 'nour@example.com', '0555765432')
+#PatientModify('P002','Nour El Imane Meziani', '29/11/1999', 'Tizi Ouzou', 'Female', 'Acariens, Poussiere', 0, 'None', 0, 'nour@example.com', '0555765432')
+PatientInsert('Patient', '29/11/1999', 'Tizi Ouzou', 'Male', 'Poussiere, Acariens', 0, 'Migraine', 0, 'nour@example.com', '0555765432')
