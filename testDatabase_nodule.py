@@ -4,13 +4,13 @@ import sqlite3
 import matplotlib.pyplot as plt
 Database_path = "NoduleDatabase.db"
 #! Research a nodule
-def NoduleResearch(PatientID, ConsultationID):
+def NoduleResearch(ConsultationID):
     exist = -1
-    request_research = "SELECT * FROM Nodule where idP = ? and idConsultation = ?"
+    request_research = "SELECT * FROM Nodule where idConsultation = ?"
     #* Create a connection
     conn = sqlite3.connect(Database_path)
     cursor = conn.cursor()
-    cursor.execute(request_research, (PatientID, ConsultationID))
+    cursor.execute(request_research, ( ConsultationID, ))
     data = cursor.fetchone()
     
     if data is None:
@@ -45,7 +45,7 @@ def CoupleExiste(ConsultationID, PatientID):
 #? Insert a nodule in the database
 def NoduleInsert(ConsultationID, PatientID, NoduleArray, NoduleClassification):
     request_insert = "INSERT INTO Nodule (idConsultation, idP, NoduleArray, NoduleClassification) VALUES (?,?,?,?)"
-    if NoduleResearch(PatientID, ConsultationID) == -1 and CoupleExiste(ConsultationID, PatientID) == 1: #! The nodule doesn't existe
+    if NoduleResearch(ConsultationID) == -1 and CoupleExiste(ConsultationID, PatientID) == 1: #! The nodule doesn't existe
         conn = sqlite3.connect(Database_path)
         conn.execute("PRAGMA foreign_keys = ON")
         cursor = conn.cursor()
@@ -60,28 +60,49 @@ def NoduleInsert(ConsultationID, PatientID, NoduleArray, NoduleClassification):
         conn.close()
     else:
         if CoupleExiste(ConsultationID, PatientID) == -1:
-            print("There is no consultation for this patient done by this clinician")
+            print("This patient never passed this consultation, please check the ID of the patient or of the consultation")
         else:
             print("The nodule already exist")
 #? Search for a nodule if he exists
-def SelectNodule(ConsultationID, PatientID):
-    request_research = "SELECT NoduleArray FROM Nodule where idP = ? and idConsultation = ?"
-    if NoduleResearch(PatientID, ConsultationID) == 1:
+def SelectNodule(ConsultationID):
+    request_research = "SELECT NoduleArray FROM Nodule where idConsultation = ?"
+    if NoduleResearch(ConsultationID) == 1:
         conn = sqlite3.connect(Database_path)
         cursor = conn.cursor()
-        cursor.execute(request_research, (PatientID, ConsultationID))
+        cursor.execute(request_research, (ConsultationID, ))
         result = cursor.fetchone()[0]
         conn.close()
         img = np.fromstring(result,dtype='float32').reshape(64,64,1)
         plt.imshow(img, "gray")
         plt.show()
         
-    
+def NoduleModify(PatientID, ConsultationID, NoduleArray, NoduleClassification):
+    update_request = "UPDATE Nodule set idP = ?, NoduleArray = ? , NoduleClassification = ? where idConsultation = ?"
+    #? Check if the nodule existe
+    if NoduleResearch(ConsultationID) == 1:
+        #* Prepare the nodule img
+        array_str = NoduleArray.tostring()
+        #! The nodule existe
+        conn = sqlite3.connect(Database_path)
+        cursor = conn.cursor()
+        conn.execute("PRAGMA foreign_keys = ON")
+        try:
+            cursor.execute(update_request, (PatientID, sqlite3.Binary(array_str), NoduleClassification, ConsultationID))
+            if cursor.rowcount <1:
+                print("Can't Update the nodule")
+            else:
+                print("Nodule Updated")
+            conn.commit()
+            conn.close()
+        except:
+            print("Check if the consultation ID or patient ID are correct")
+        
 if __name__ =="__main__":
     #NoduleResearch('P000', 'CS000')
     test = np.load('XTrain_X_aug.npy', allow_pickle=True)
-    #NoduleInsert('CS003', 'P003', test[4],0)
-    SelectNodule('CS003', 'P003')
+    NoduleInsert('CS005', 'P004', test[4],0)
+    #SelectNodule('CS003')
+    #NoduleModify('P003', 'CS003', test[25], 1)
 
     
     

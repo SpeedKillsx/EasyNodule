@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-
+from testDatabase_nodule import NoduleModify
 
 Database_path = "NoduleDatabase.db"
 #* Method Auto Increment the ConsultationID
@@ -122,7 +122,13 @@ def ConsultationModify(ConsultationID, ClinicianID,PatientID, DateConsultation, 
         if cursor.rowcount < 1:
             print("There is no consultation with this ID, please check your identifiant")
         else:
-            print("Consultation Updated")
+            
+            cursor.execute("UPDATE Nodule set idP = ? where idConsultation = ?", (PatientID, ConsultationID))
+            if cursor.rowcount < 1:
+                print("Can't apply modifications, maybe there no nodule added for this consultation")
+            else:
+                conn.commit()
+                print("Consultation Updated")
     except sqlite3.IntegrityError:
         print("Verify if your id/patient's ID are correct")
     conn.close()
@@ -136,9 +142,9 @@ if __name__ =="__main__":
         - ConsultationInsert('C000', 'P2001','20/05/2020')
         - PatientConsultation('P000')
     """
-    #ConsultationInsert('C024', 'P005','2/08/2020')
+    #ConsultationInsert('C025', 'P004','2/08/2020', 'NO PRBLM')
     #print(PatientConsultation('P000'))
-    ConsultationModify('CS001','C000', 'P001','2/08/2020', 'Very Good tests')
+    ConsultationModify('CS005','C026', 'P005','2/08/2020', 'Very Good tests')
     
 
     
