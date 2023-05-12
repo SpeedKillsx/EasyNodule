@@ -10,26 +10,25 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys,res
+import os
 from Database_methods import *
+from main import *
 class Ui_FormSign(object):
         
         
-        def openWindow2(self):
-                from login import Ui_Form
+       
                 
-                self.window = QtWidgets.QWidget()
-                
-                self.ui = Ui_Form()
-                self.ui.setupUi(self.window)
-                self.window.show()
         
         def setupUi(self, FormSign):
                 FormSign.setObjectName("FormSign")
                 FormSign.resize(617, 460)
                 FormSign.setWindowFlags(QtCore.Qt.FramelessWindowHint)
                 FormSign.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+                icon = QtGui.QIcon("ressources/logo.ico")
+                FormSign.setWindowIcon(icon)
                 self.widget = QtWidgets.QWidget(FormSign)
                 self.widget.setGeometry(QtCore.QRect(0, -10, 551, 451))
+                
                 self.widget.setStyleSheet("QPushButton#loginBtn,#signBtn{\n"
         "background-color: qlineargradient(spread:pad,x1:0,y1:0.505682,x2:1,y2:0.477,stop:0 rgba(20,47,78,219),stop:1 rgba(85,98,112,226));\n"
         "\n"
@@ -231,6 +230,7 @@ class Ui_FormSign(object):
                 self.retranslateUi(FormSign)
                 QtCore.QMetaObject.connectSlotsByName(FormSign)
                 self.signBtn.clicked.connect(self.ClinicianSignUp)
+                
 
         def retranslateUi(self, FormSign):
                 _translate = QtCore.QCoreApplication.translate
@@ -246,7 +246,12 @@ class Ui_FormSign(object):
                 #self.nameEdit_2.setPlaceholderText(_translate("FormSign", "Birthday DD/MM/YYYY"))
                 self.label_7.setText(_translate("FormSign", "Enter Your Information"))
                 self.passwordEdit_2.setPlaceholderText(_translate("FormSign", "Confirm Password"))
-                
+        def openWindow2(self):
+                from login import Ui_Form
+                self.window = QtWidgets.QWidget()
+                self.ui = Ui_Form()
+                self.ui.setupUi(self.window)
+                self.window.show()
         def ClinicianSignUp(self):
                 
                 #! Verify if all the fields are filled
@@ -261,8 +266,9 @@ class Ui_FormSign(object):
                                                 )
                                 self.msg.setText("Your are account has been created")
                                 self.msg.exec_()
+                                #self.openWindow2()
                                 
-                                
+                        
                         else:
                                 self.msg.setText("The password is incorrect, please check your password again")
                                 self.msg.exec_()

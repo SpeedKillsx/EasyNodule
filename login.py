@@ -15,6 +15,7 @@ from main import *
 class Ui_Form(object):
         
         def openWindow(self):
+                #Form.close()
                 self.window = QtWidgets.QWidget()
                 self.ui = Ui_FormSign()
                 self.ui.setupUi(self.window)
@@ -241,6 +242,8 @@ class Ui_Form(object):
                         self.msg.setText("You are connected.\nWelcome again")
                         self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                         self.msg.exec_()
+                        
+                        Form.close()
                         window = MainWindow()
                         NameC, BirthdayC, WilayaC,Hospital, Grade, PasswordC, UsernameC, IdC = PrintActualClinicianInfo(ClinicianID(self.usernameEdit.text())[0])
                         window.ui.textIdC.setText(IdC)
@@ -251,7 +254,7 @@ class Ui_Form(object):
                         window.ui.textUsernameC.setText(UsernameC)
                         window.show()
                         
-                        Form.hide()
+                        
                                 
                         
                         
