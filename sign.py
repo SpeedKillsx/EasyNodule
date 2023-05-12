@@ -14,6 +14,15 @@ from Database_methods import *
 class Ui_FormSign(object):
         
         
+        def openWindow2(self):
+                from login import Ui_Form
+                
+                self.window = QtWidgets.QWidget()
+                
+                self.ui = Ui_Form()
+                self.ui.setupUi(self.window)
+                self.window.show()
+        
         def setupUi(self, FormSign):
                 FormSign.setObjectName("FormSign")
                 FormSign.resize(617, 460)
@@ -252,6 +261,8 @@ class Ui_FormSign(object):
                                                 )
                                 self.msg.setText("Your are account has been created")
                                 self.msg.exec_()
+                                
+                                
                         else:
                                 self.msg.setText("The password is incorrect, please check your password again")
                                 self.msg.exec_()
@@ -262,10 +273,3 @@ class Ui_FormSign(object):
 
                 
     
-if __name__ == "__main__":
-        app=QtWidgets.QApplication(sys.argv)
-        FormSign = QtWidgets.QWidget()
-        ui = Ui_FormSign()
-        ui.setupUi(FormSign)
-        FormSign.show()
-        sys.exit(app.exec_())

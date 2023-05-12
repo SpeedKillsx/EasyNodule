@@ -99,9 +99,11 @@ def NoduleModify(PatientID, ConsultationID, NoduleArray, NoduleClassification):
         
 if __name__ =="__main__":
     #NoduleResearch('P000', 'CS000')
-    test = np.load('XTrain_X_aug.npy', allow_pickle=True)
-    NoduleInsert('CS005', 'P004', test[4],0)
-    #SelectNodule('CS003')
+    test = np.load('DataSet_all.npy', allow_pickle=True)
+    #plt.imshow(test[0,0][32,:,:])
+    #plt.show()
+    #NoduleInsert('CS004', 'P004', test[0,0][32,:,:].astype('float32')/255.0,0)
+    SelectNodule('CS004')
     #NoduleModify('P003', 'CS003', test[25], 1)
 
     

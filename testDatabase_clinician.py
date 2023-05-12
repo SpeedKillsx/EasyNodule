@@ -140,6 +140,7 @@ def PrintActualClinicianInfo(IDClinian):
     select_request = "SELECT NameC, BirthdayC, WilayaC, Hospital, Grade, PasswordC, UsernameC from Clinician where idC = ?" 
     cursor.execute(select_request, (IDClinian, ))
     clinician_actual_info = [info for info in cursor.fetchall()[0]]
+    print(clinician_actual_info)
     """
         Here we change the fields in the interface
         self.NameC, self.BirthdayC, self.WilayaC, self.Hospital, self.Grade, self.PasswordC, self.UsernameC = self.clinician_actual_info
@@ -182,5 +183,6 @@ for l in v:
     ClinicianInsert(NameC,BirthdayC, WilayaC,Hospital,Grade,PasswordC, UsernameC)
 """
 #ClinicianModify('C000','Bouchama Benamar', '06/04/1978', 'Tipaza', 'CHU de Blida', 'Radiologue', 'f5G5c&3ViXe', 'bouchama_benamar')
-ClinicianInsert("Clin24","25/12/1982", 'a','Hospital','Grade','PasswordC', 'user24')
+#ClinicianInsert("Clin24","25/12/1982", 'a','Hospital','Grade','PasswordC', 'user24')
 #ClinicianDelete('user24')
+PrintActualClinicianInfo('C001')
