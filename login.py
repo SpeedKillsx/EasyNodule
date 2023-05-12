@@ -1,8 +1,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2 import *
+from Custom_Widgets.Widgets import *
 import sys,res
 from sign import Ui_FormSign
 from Database_methods import *
+from ui_interface import *
+from main import *
 """Tests:
 - ClinicianLogin: work
 - All the erros seems work well
@@ -11,11 +15,15 @@ from Database_methods import *
 class Ui_Form(object):
         
         def openWindow(self):
-                Form.close()
                 self.window = QtWidgets.QWidget()
                 self.ui = Ui_FormSign()
                 self.ui.setupUi(self.window)
                 self.window.show()
+                #MainWindow = QtWidgets.QMainWindow()
+                
+                #loadJsonStyle(self, self.ui)
+                #MainWindow.show()
+                
                 
                 
         def setupUi(self, Form):
@@ -23,6 +31,8 @@ class Ui_Form(object):
                 Form.resize(361, 460)
                 Form.setWindowFlags(QtCore.Qt.FramelessWindowHint)
                 Form.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+                icon = QIcon("ressources/logo.ico")
+                Form.setWindowIcon(icon)
                 self.widget = QtWidgets.QWidget(Form)
                 self.widget.setGeometry(QtCore.QRect(0, -10, 331, 451))
                 self.widget.setStyleSheet("QPushButton#loginBtn,#signBtn{\n"
@@ -66,6 +76,7 @@ class Ui_Form(object):
         "background-color : rgba(105,118,132,200);\n"
         "}")
                 self.widget.setObjectName("widget")
+               
                 self.label = QtWidgets.QLabel(self.widget)
                 self.label.setGeometry(QtCore.QRect(30, 19, 300, 431))
                 self.label.setStyleSheet("border-image: url(:/images/bg.jpg);\n"
@@ -230,6 +241,19 @@ class Ui_Form(object):
                         self.msg.setText("You are connected.\nWelcome again")
                         self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                         self.msg.exec_()
+                        window = MainWindow()
+                        NameC, BirthdayC, WilayaC,Hospital, Grade, PasswordC, UsernameC, IdC = PrintActualClinicianInfo(ClinicianID(self.usernameEdit.text())[0])
+                        window.ui.textIdC.setText(IdC)
+                        window.ui.textNameC.setText(NameC)
+                        window.ui.textWilayaC.setText(WilayaC)
+                        window.ui.textHospital.setText(Hospital)
+                        window.ui.textGrade.setText(Grade)
+                        window.ui.textUsernameC.setText(UsernameC)
+                        window.show()
+                        
+                        Form.hide()
+                                
+                        
                         
                         
 if __name__ == "__main__":
