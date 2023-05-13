@@ -10,6 +10,7 @@ from matplotlib.gridspec import GridSpec
 import numpy as np
 from PIL import Image
 from Preporcessing import *
+from Database_methods import *
 class MainWindow(QMainWindow):
     def LoadModels(self):
         path_modelX = "Models/ModelX/capsule-5"
@@ -49,7 +50,12 @@ class MainWindow(QMainWindow):
         self.ui.label_Z_5.setText(str(np.max(prZ))+" %")
         self.ui.label_12.setText("Final Classification: "+result)
         
-        
+    def ResearchPatient(self):
+        print(self.ui.textPhaneNumberSearch.toPlainText())
+        if PatientResearchPhoneName(self.ui.textPhaneNumberSearch.toPlainText(), self.ui.textNamePatientSearch.toPlainText()) ==1:
+            print("Patient exist")
+        else:
+            print("Patient is not in the database")
     def clicker(self):
         print("You clicked the button to choose a file !")
         fname = QFileDialog.getOpenFileName(self, "Open File and Choose the 3D Nodule", "" , "All Files (*);; Python Files(*.npy)")
@@ -144,6 +150,8 @@ class MainWindow(QMainWindow):
         
         # Classification
         self.ui.startClassificationBtn.clicked.connect(self.StartClassification)
+        #Patient research
+        self.ui.researchPatientBtn.clicked.connect(self.ResearchPatient)
 
 
 if __name__ == '__main__':

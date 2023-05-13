@@ -203,3 +203,33 @@ def ClinicianID(ClinicianUsername):
     conn.close()
     return data
 #=================================================PATIENT=====================================================
+#? Methode that search for a patient
+def PatientResearchPhoneName(PhonePatient,NamePatient):
+    """
+    Search if a patient with a given Patient's Email and Patient's Name existe in the database
+    Args:
+        PhonePatient (str): The phone number of the patient\n
+        NamePatient  (str): The name of the patient
+
+    Returns:
+        int: 1 if the patient existe else -1
+    """
+    #! The request below select an ID from table clinician
+    search_request = "SELECT * from Patient where PhoneP = ? and NameP = ?"
+    exist = -1
+    conn = sqlite3.connect(Database_path)
+    print ("Opened database successfully")
+    #! Create a curson for the request
+    cursor = conn.cursor()
+    #! Execute the request
+    cursor.execute(search_request, (PhonePatient,NamePatient))
+    #* Check if there is a resulted row
+    data = cursor.fetchone()
+    
+    if data is None:
+        #! Case where there is no patient with the given Name
+        print("There is no patient with this Name!!!\nPlease, check again if there are no mistakes in the identifiant")
+    else:
+        exist = 1
+    conn.close()
+    return exist
