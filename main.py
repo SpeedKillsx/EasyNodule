@@ -12,6 +12,9 @@ from PIL import Image
 
 
 class MainWindow(QMainWindow):
+    
+    def StartClassification(self):
+        pass
     def clicker(self):
         print("You clicked the button to choose a file !")
         fname = QFileDialog.getOpenFileName(self, "Open File and Choose the 3D Nodule", "C:\\Users\\21379\\Desktop\\memoire\\DATA" , "All Files (*);; Python Files(*.npy)")
