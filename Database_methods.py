@@ -343,16 +343,16 @@ def PatientInsert(NameP,BirthdayP,WilayaP,Sexe,Allergies,Smoking,MedHistory,Canc
     """Insert a new patient in the database. If the patient has already an account, the account can't be created.
 
     Args:
-        NameP (_type_): Name of the patient
-        BirthdayP (_type_): Birthday of the patient
-        WilayaP (_type_): Wilaya of the patient
-        Sexe (_type_): Sexe of the patient
-        Allergies (_type_): Allergies of the patient
-        Smoking (_type_): a bool that indicates if the patient smook or not
-        MedHistory (_type_): Medical history of the patient
-        CancerFamilly (_type_): A bool, it indicates if there is a member of the familly affected by lung cancer
-        EmailP (_type_): email of the patient
-        PhoneP (_type_): Number phone of the patient
+        NameP (_type_): Name of the patient\n
+        BirthdayP (_type_): Birthday of the patient\n
+        WilayaP (_type_): Wilaya of the patient\n
+        Sexe (_type_): Sexe of the patient\n
+        Allergies (_type_): Allergies of the patient\n
+        Smoking (_type_): a bool that indicates if the patient smook or not\n
+        MedHistory (_type_): Medical history of the patient\n
+        CancerFamilly (_type_): A bool, it indicates if there is a member of the familly affected by lung cancer\n
+        EmailP (_type_): email of the patient\n
+        PhoneP (_type_): Number phone of the patient\n
     """
     if PhoneP=="" or NameP=="":
         print("Please insert a phone number and Name!!!")
