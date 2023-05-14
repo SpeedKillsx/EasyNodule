@@ -5,7 +5,7 @@ from Custom_Widgets.Widgets import *
 import sys,res
 from sign import Ui_FormSign
 from Database_methods import *
-from ui_interface import *
+from interface_ui import *
 from main import *
 """Tests:
 - ClinicianLogin: work
