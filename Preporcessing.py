@@ -163,7 +163,7 @@ def Preprocessing(img):
     image = Image.fromarray(img)
     #print("image size : ", image.size)
 
-#  Calcul des coordonnées pour couper le milieu de l'image
+    #Calcul des coordonnées pour couper le milieu de l'image
     width = 64 
     height = 64
     left = (width - 32) // 2
@@ -171,10 +171,10 @@ def Preprocessing(img):
     right = left + 32
     bottom = top + 32
 
-# Découpage de l'image
+    #Découpage de l'image
     sub_image = image.crop((left, top, right, bottom))
 
-#conversion vers numpy
+    #conversion vers numpy
     np_image = np.asarray(sub_image)
     #print("shape np image ", np_image.shape)
     np_image = cv.GaussianBlur(np_image, (3,3 ), 3)
@@ -238,3 +238,24 @@ def final_pred(imgX, imgY, imgZ, modelx, modely, modelz):
             return 0
         
     return valX[0]
+
+def final_predMAJOR(imgX, imgY, imgZ, modelx, modely, modelz):
+    
+    imgX = Preprocessing(imgX)
+    imgY = Preprocessing(imgY)
+    imgZ = Preprocessing(imgZ)
+    probaX, valX = predict_proba(modelx, tf.expand_dims(imgX, 0))
+    probaY, valY = predict_proba(modely, tf.expand_dims(imgY, 0))
+    probaZ, valZ = predict_proba(modelz, tf.expand_dims(imgZ, 0))
+    somme = 0
+    if (valX[0] == valY[0]) :
+        #list_def_ref.append([i, imgX, imgY, None])
+        return valX[0]
+    else:
+        if (valY[0]== valZ[0]):
+            #list_def_ref.append([i, None,imgY, imgZ])
+            return valY[0]
+        else:
+            if (valX[0]== valZ[0]):
+                #list_def_ref.append([i, imgX,None, imgZ])
+                return valX[0]
