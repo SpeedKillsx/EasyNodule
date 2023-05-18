@@ -410,3 +410,256 @@ def PatientModify(idP, NameP,BirthdayP,WilayaP,Sexe,Allergies,Smoking,MedHistory
         conn.commit()
         conn.close()
         print("Patient update succesfully")
+#==============================================================================================================
+#                                                           CONSULTATION
+#==============================================================================================================
+
+#* Method Auto Increment the ConsultationID
+def CreateIdConsultation():
+    """
+    Create an automatic ID for a new patient if he doesn't exist already in the database.
+    The new ID can be in one of the 3 categories:
+        Category 1: The Consultation was added with the 10th first Consultation in the app, the ID would be between CS000 and CS009
+        Category 2: The Consultation was added with the 100th first Consultation in the app, the ID would be between CS010 and CS099
+        Category 3: The Consultation was added the rest of possible IDs in the App, the ID would be between P0100 and CSXXX
+    Returns:
+        str: the new ID
+    """
+    request_all_IDs = "SELECT idConsultation from Consultation"
+    #! Connect to the database
+    conn = sqlite3.connect(Database_path)
+    cursor= conn.cursor()
+    cursor.execute(request_all_IDs)
+    datas = cursor.fetchall()
+    #! Auto-Incerement the ID
+    #print(datas[-1])
+    if len(datas) == 0:
+        actula_id = "CS000"
+        return actula_id
+    actula_id = int(datas[-1][-1].strip('CS'))
+    new_id = actula_id + 1
+    #* Check in which categroy the ID should be in :
+    if len(str(new_id)) == 1 and new_id !=10: #!First Category P00X
+        new_id = str('CS00') + str(new_id)
+    elif len(str(new_id)) == 2 and new_id !=100: #* Second Category P0XX
+        new_id = str('CS0') + str(new_id)
+    else: #? Third Category PXXX or more
+        new_id = str('CS') + str(new_id)
+    
+    conn.close()
+    return new_id
+#* Method search consultation using the ID
+def SearchConsultation(ClincianID, PatientID, DateConsultation):
+    exist = -1
+    request_search = "SELECT * FROM Consultation where idC =? and idP = ? and DateConsultation = ?"
+    #! Change the format of the date (from dd/mm/yy to yy/mm/dd )
+    """DateConsultation = DateConsultation.replace('/','-')
+    day, month, year = DateConsultation.split('-')
+    DateConsultation = datetime.date(int(year), int(month), int(day))"""
+    
+    print("Saerch consultation = ", DateConsultation)
+    #DateConsultation = year+month+day
+    
+    #! Create a connection to the database
+    conn = sqlite3.connect(Database_path)
+    cursor = conn.cursor()
+    #* Execute the request
+    cursor.execute(request_search, (ClincianID, PatientID, DateConsultation))
+    #! take result of execution, we know that we will have just one row
+    data = cursor.fetchone()
+    #! Check if there is a row
+    if data is None:
+        print("There is no consultation with this id\n")
+    else:
+        print("The consultation already exist")
+        exist = 1
+    conn.close()
+    return exist
+
+#! Insert a new consultation in the database
+def ConsultationInsert(ClinicianID, PatientID, DateConsultation, MedicalObservation):
+    """Insert a new consultation in the database
+
+    Args:
+        ClinicianID (str): ID of the Clinician
+        PatientID (str): ID of the patient
+        DateConsultation (str): Date fo the consultation
+    """
+    request_insert="INSERT INTO Consultation (idConsultation, idC, idP, DateConsultation, MedicalObservation) Values(?,?,?,?,?)"
+    print(datetime.date.today())
+    #? Check if the consultation exist
+    if SearchConsultation(ClinicianID,PatientID, DateConsultation) == -1: #* The consultation doesn't existe
+        #! Create a connection to the database
+        conn = sqlite3.connect(Database_path)
+        conn.execute("PRAGMA foreign_keys = ON")
+        #* Create a cursor
+        cursor = conn.cursor()
+        #! Create a new ConsultationID
+        ConsultationID = CreateIdConsultation()
+        #! Split the date
+        """day, month, year = DateConsultation.split('/')"""
+        try:
+            cursor.execute(request_insert, (ConsultationID, ClinicianID, PatientID, DateConsultation, MedicalObservation))
+            conn.commit()
+            print("Consultation is added")
+        except:
+            print("There is a mistake in the information, check if Consultation's ID or Patient's ID are correct!!!!")       
+        conn.close()
+#! Show all the consultation for a patient
+def PatientConsultation(PatientID):
+    data = None
+    request_consultations = "SELECT * FROM Consultation where idP = ?"
+    #! Create a connection
+    conn = sqlite3.connect(Database_path)
+    cursor = conn.cursor()
+    cursor.execute(request_consultations, (PatientID, ))
+    
+    data = cursor.fetchall()
+    conn.close()
+    if data is None:
+        print("There is no consultation for this patient")
+    
+    return data
+def ConsultationModify(ConsultationID, ClinicianID,PatientID, DateConsultation, MedicalObservation):
+    #* Check if the connection existe
+    #! The consultation existe, we can modify it
+    update_request = "UPDATE Consultation set idC = ?,idP = ?, DateConsultation = ?, MedicalObservation = ? where idConsultation = ?"
+    conn = sqlite3.connect(Database_path)
+    conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA primary_keys = ON")
+    day, month, year = DateConsultation.split('/')
+    cursor = conn.cursor()
+    try:
+        cursor.execute(update_request, (ClinicianID, PatientID, datetime.date(int(year), int(month), int(day)),MedicalObservation, ConsultationID))
+        conn.commit()
+        if cursor.rowcount < 1:
+            print("There is no consultation with this ID, please check your identifiant")
+        else:
+            
+            cursor.execute("UPDATE Nodule set idP = ? where idConsultation = ?", (PatientID, ConsultationID))
+            if cursor.rowcount < 1:
+                print("Can't apply modifications, maybe there no nodule added for this consultation")
+            else:
+                conn.commit()
+                print("Consultation Updated")
+    except sqlite3.IntegrityError:
+        print("Verify if your id/patient's ID are correct")
+    conn.close()
+#==============================================================================================================
+#                                                           Nodule
+#==============================================================================================================
+def NoduleResearch(ConsultationID):
+    exist = -1
+    request_research = "SELECT * FROM Nodule where idConsultation = ?"
+    #* Create a connection
+    conn = sqlite3.connect(Database_path)
+    cursor = conn.cursor()
+    cursor.execute(request_research, ( ConsultationID, ))
+    data = cursor.fetchone()
+    
+    if data is None:
+        print("The nodule doesn't exist")
+    else:
+        exist = 1
+    conn.close()
+    return exist
+#? Check if a consultation was done for a patient
+def CoupleExiste(ConsultationID, PatientID):
+    """Check if the patient with the given ID has passd this consultation
+
+    Args:
+        ConsultationID (str): ID of the consultation
+        PatientID (str): Id of the patient
+
+    Returns:
+        int: Integer Value, 1 if the patient passed the consultation, if not return -1
+    """
+    request_research = "SELECT * FROM Consultation where idP = ? and idConsultation = ?"
+    conn = sqlite3.connect(Database_path)
+    cursor = conn.cursor()
+    cursor.execute(request_research, (PatientID, ConsultationID))
+    result = cursor.fetchone()
+    #print("Le resultat = ", result)
+    if result is None:
+        conn.close()
+        return -1
+    else:
+        conn.close()
+        return 1
+#? Get the Consultation ID using the name
+def ConsultationID(PatientID, ClinicianID, ConsultationDate):
+    """GET THE CONSULTATION ID
+
+    Args:
+        ConsultationID (str): ID of the consultation
+        PatientID (str): Id of the patient
+
+    Returns:
+        int: Integer Value, 1 if the patient passed the consultation, if not return -1
+    """
+    request_research = "SELECT idConsultation FROM Consultation where idP = ? and idC = ? and DateConsultation = ?"
+    conn = sqlite3.connect(Database_path)
+    cursor = conn.cursor()
+    cursor.execute(request_research, (PatientID, ClinicianID, ConsultationDate))
+    result = cursor.fetchone()
+    #print("Le resultat = ", result)
+    if result is None:
+        conn.close()
+        return -1
+    else:
+        conn.close()
+        return result[0]
+#? Insert a nodule in the database
+def NoduleInsert(ConsultationID, PatientID, NoduleArray, NoduleClassification):
+    request_insert = "INSERT INTO Nodule (idConsultation, idP, NoduleArray, NoduleClassification) VALUES (?,?,?,?)"
+    if NoduleResearch(ConsultationID) == -1 and CoupleExiste(ConsultationID, PatientID) == 1: #! The nodule doesn't existe
+        conn = sqlite3.connect(Database_path)
+        conn.execute("PRAGMA foreign_keys = ON")
+        cursor = conn.cursor()
+        #* Convert numpy array to string
+        array_str = NoduleArray.tostring()
+        try:
+            cursor.execute(request_insert, (ConsultationID, PatientID, sqlite3.Binary(array_str), NoduleClassification))
+            conn.commit()
+        except:
+            print("Check if the consultation ID or patient ID are correct")
+        
+        conn.close()
+    else:
+        if CoupleExiste(ConsultationID, PatientID) == -1:
+            print("This patient never passed this consultation, please check the ID of the patient or of the consultation")
+        else:
+            print("The nodule already exist")
+#? Search for a nodule if he exists
+def SelectNodule(ConsultationID):
+    request_research = "SELECT NoduleArray FROM Nodule where idConsultation = ?"
+    if NoduleResearch(ConsultationID) == 1:
+        conn = sqlite3.connect(Database_path)
+        cursor = conn.cursor()
+        cursor.execute(request_research, (ConsultationID, ))
+        result = cursor.fetchone()[0]
+        conn.close()
+        img = np.fromstring(result,dtype='float32').reshape(64,64,1)
+        plt.imshow(img, "gray")
+        plt.show()
+        
+def NoduleModify(PatientID, ConsultationID, NoduleArray, NoduleClassification):
+    update_request = "UPDATE Nodule set idP = ?, NoduleArray = ? , NoduleClassification = ? where idConsultation = ?"
+    #? Check if the nodule existe
+    if NoduleResearch(ConsultationID) == 1:
+        #* Prepare the nodule img
+        array_str = NoduleArray.tostring()
+        #! The nodule existe
+        conn = sqlite3.connect(Database_path)
+        cursor = conn.cursor()
+        conn.execute("PRAGMA foreign_keys = ON")
+        try:
+            cursor.execute(update_request, (PatientID, sqlite3.Binary(array_str), NoduleClassification, ConsultationID))
+            if cursor.rowcount <1:
+                print("Can't Update the nodule")
+            else:
+                print("Nodule Updated")
+            conn.commit()
+            conn.close()
+        except:
+            print("Check if the consultation ID or patient ID are correct")
