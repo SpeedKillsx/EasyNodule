@@ -1,5 +1,7 @@
 import sqlite3
 import datetime
+import numpy as np
+import matplotlib.pyplot as plt
 from multipledispatch import dispatch
 Database_path = "NoduleDatabase.db"
 #==============================================================================================================
@@ -554,7 +556,7 @@ def NoduleResearch(ConsultationID):
     #* Create a connection
     conn = sqlite3.connect(Database_path)
     cursor = conn.cursor()
-    cursor.execute(request_research, ( ConsultationID, ))
+    cursor.execute(request_research, (ConsultationID, ))
     data = cursor.fetchone()
     
     if data is None:
@@ -598,11 +600,19 @@ def ConsultationID(PatientID, ClinicianID, ConsultationDate):
         int: Integer Value, 1 if the patient passed the consultation, if not return -1
     """
     request_research = "SELECT idConsultation FROM Consultation where idP = ? and idC = ? and DateConsultation = ?"
+    request_research_all = "SELECT idConsultation FROM Consultation"
     conn = sqlite3.connect(Database_path)
     cursor = conn.cursor()
+    cursor.execute(request_research_all, ())
+    result_all = cursor.fetchall()
+    print("len = ",len(result_all))
+    if len(result_all) == 0:
+        conn.close()
+        return datetime.date.today()
     cursor.execute(request_research, (PatientID, ClinicianID, ConsultationDate))
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     #print("Le resultat = ", result)
+    
     if result is None:
         conn.close()
         return -1
@@ -617,6 +627,7 @@ def NoduleInsert(ConsultationID, PatientID, NoduleArray, NoduleClassification):
         conn.execute("PRAGMA foreign_keys = ON")
         cursor = conn.cursor()
         #* Convert numpy array to string
+        print("Shape array = ", NoduleArray.shape)
         array_str = NoduleArray.tostring()
         try:
             cursor.execute(request_insert, (ConsultationID, PatientID, sqlite3.Binary(array_str), NoduleClassification))
@@ -639,7 +650,8 @@ def SelectNodule(ConsultationID):
         cursor.execute(request_research, (ConsultationID, ))
         result = cursor.fetchone()[0]
         conn.close()
-        img = np.fromstring(result,dtype='float32').reshape(64,64,1)
+        img = np.fromstring(result,dtype='float32')
+        img = img.reshape(64,64,64)
         plt.imshow(img, "gray")
         plt.show()
         
@@ -663,3 +675,4 @@ def NoduleModify(PatientID, ConsultationID, NoduleArray, NoduleClassification):
             conn.close()
         except:
             print("Check if the consultation ID or patient ID are correct")
+SelectNodule("CS004")

@@ -140,7 +140,7 @@
 							"homeBtn": "page_6",
 							"patientsBtn": "page_7",
                             "noduleBtn": "page_8",
-							"emailBtn": "page_9"
+							"reportBtn": "page_9"
 						}
 					]
 				}
@@ -184,7 +184,7 @@
 			"homeBtn",
 			"noduleBtn",
 			"patientsBtn",
-			"emailBtn"
+			"reportBtn"
 		],
 		"Style":[{
 			"Active": "background-color: #2c313c;",
