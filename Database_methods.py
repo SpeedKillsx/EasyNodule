@@ -675,4 +675,3 @@ def NoduleModify(PatientID, ConsultationID, NoduleArray, NoduleClassification):
             conn.close()
         except:
             print("Check if the consultation ID or patient ID are correct")
-SelectNodule("CS004")
