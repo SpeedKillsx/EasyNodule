@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
 
         # Dessiner les contours sur la figure
         for contour in contours:
-            ax.plot(contour[:, 0, 0], contour[:, 0, 1], 'r', linewidth=5)
+            ax.plot(contour[:, 0, 0], contour[:, 0, 1], 'r', linewidth=2)
 
         # Mettre à jour le canevas
         self.canvas.draw()
