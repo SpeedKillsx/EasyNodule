@@ -53,6 +53,12 @@ border-radius:10px;
 
 #headerContainer, #FooterContainer{
 background-color: #2c313c;
+}
+
+QPushButton:pressed{
+padding-left: 5px;
+padding-top: 5px;
+background-color : rgba(105,118,132,200);
 }</string>
   </property>
   <property name="iconSize">
@@ -472,21 +478,6 @@ background-color: #2c313c;
           </font>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
-          <property name="spacing">
-           <number>5</number>
-          </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
-           <number>5</number>
-          </property>
           <item>
            <widget class="QFrame" name="frame_4">
             <property name="frameShape">
@@ -538,23 +529,236 @@ background-color: #2c313c;
           <item>
            <widget class="QCustomStackedWidget" name="centerMenuPages">
             <widget class="QWidget" name="page">
-             <layout class="QVBoxLayout" name="verticalLayout_7">
-              <item>
-               <widget class="QLabel" name="label_2">
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Settings</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_2">
+              <property name="geometry">
+               <rect>
+                <x>-1</x>
+                <y>9</y>
+                <width>181</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>13</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Settings</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_20">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>90</y>
+                <width>181</width>
+                <height>241</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QRadioButton" name="radioMajor">
+                 <property name="font">
+                  <font>
+                   <pointsize>9</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Major (by default)</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioThresholding">
+                 <property name="font">
+                  <font>
+                   <pointsize>9</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Thresholding</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioGameTheory">
+                 <property name="font">
+                  <font>
+                   <pointsize>9</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Game Theory</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioStrict">
+                 <property name="font">
+                  <font>
+                   <pointsize>9</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Strict</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="classificationMethodeBtn">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(31, 35, 42);
+border-radius : 5px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Confirm</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QLabel" name="label_39">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>40</y>
+                <width>181</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Classification methods :</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_21">
+              <property name="geometry">
+               <rect>
+                <x>-1</x>
+                <y>349</y>
+                <width>181</width>
+                <height>131</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <widget class="QLabel" name="label_40">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>10</y>
+                 <width>171</width>
+                 <height>111</height>
+                </rect>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>To get more details on nodule classification methods, please refer to the following link.</string>
+               </property>
+               <property name="scaledContents">
+                <bool>false</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLabel" name="label_42">
+               <property name="geometry">
+                <rect>
+                 <x>20</x>
+                 <y>110</y>
+                 <width>171</width>
+                 <height>111</height>
+                </rect>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>To get more details on nodule classification methods, please refer to the following link.</string>
+               </property>
+               <property name="scaledContents">
+                <bool>false</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </widget>
+             <widget class="QTextBrowser" name="textBrowserGuide">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>470</y>
+                <width>141</width>
+                <height>41</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+                <underline>true</underline>
+               </font>
+              </property>
+             </widget>
             </widget>
             <widget class="QWidget" name="page_2">
              <widget class="QLabel" name="label_3">
@@ -606,23 +810,32 @@ background-color: #2c313c;
             <widget class="QWidget" name="page_3">
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
-               <widget class="QLabel" name="label_4">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
+               <widget class="QLabel" name="label_43">
                 <property name="font">
                  <font>
                   <pointsize>13</pointsize>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Help</string>
+                 <string>You can download the user guide for Easy Nodule by clicking on the following link.</string>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextBrowser" name="textBrowserGuidePDF">
+                <property name="font">
+                 <font>
+                  <pointsize>15</pointsize>
+                 </font>
                 </property>
                </widget>
               </item>
@@ -1132,6 +1345,11 @@ background-color: #2c313c;
                         <height>31</height>
                        </size>
                       </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
                       <property name="styleSheet">
                        <string notr="true">background-color: rgb(22, 25, 29);
 border-radius:5px;</string>
@@ -1177,6 +1395,11 @@ border-radius:5px;</string>
                         <width>16777215</width>
                         <height>31</height>
                        </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
                       </property>
                       <property name="styleSheet">
                        <string notr="true">background-color: rgb(22, 25, 29);
@@ -1338,9 +1561,27 @@ border-radius:5px;</string>
                        <height>270</height>
                       </size>
                      </property>
+                     <property name="autoFillBackground">
+                      <bool>false</bool>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: rgb(22, 25, 29);</string>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="showGrid">
+                      <bool>true</bool>
+                     </property>
                      <property name="columnCount">
                       <number>11</number>
                      </property>
+                     <attribute name="horizontalHeaderCascadingSectionResizes">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
                      <column/>
                      <column/>
                      <column/>
@@ -1757,6 +1998,92 @@ border-radius : 10px;</string>
                   </widget>
                  </item>
                  <item>
+                  <widget class="QFrame" name="frame_22">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>21</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <widget class="QLabel" name="label_41">
+                    <property name="geometry">
+                     <rect>
+                      <x>400</x>
+                      <y>-5</y>
+                      <width>151</width>
+                      <height>21</height>
+                     </rect>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>9</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Classification Methode: </string>
+                    </property>
+                   </widget>
+                   <widget class="QLabel" name="label_CM">
+                    <property name="geometry">
+                     <rect>
+                      <x>580</x>
+                      <y>-7</y>
+                      <width>121</width>
+                      <height>20</height>
+                     </rect>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <italic>false</italic>
+                      <bold>true</bold>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Majority</string>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_23">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>21</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <widget class="QLabel" name="label_waiting">
+                    <property name="geometry">
+                     <rect>
+                      <x>406</x>
+                      <y>0</y>
+                      <width>91</width>
+                      <height>20</height>
+                     </rect>
+                    </property>
+                    <property name="text">
+                     <string>Please Wait !</string>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QFrame" name="frame_Results">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -2163,22 +2490,6 @@ border-radius : 10px;</string>
                     </item>
                     <item>
                      <widget class="QTextBrowser" name="textFinalClassification"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_waiting">
-                      <property name="text">
-                       <string>Please wait ! </string>
-                      </property>
-                      <property name="scaledContents">
-                       <bool>false</bool>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                      <property name="wordWrap">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
                     </item>
                    </layout>
                   </widget>
@@ -2607,38 +2918,6 @@ border-radius:5px;</string>
                      <string>Clinicien Classification :</string>
                     </property>
                    </widget>
-                   <widget class="QCheckBox" name="checkBoxClassification">
-                    <property name="geometry">
-                     <rect>
-                      <x>140</x>
-                      <y>40</y>
-                      <width>61</width>
-                      <height>31</height>
-                     </rect>
-                    </property>
-                    <property name="text">
-                     <string>Benin</string>
-                    </property>
-                    <property name="tristate">
-                     <bool>false</bool>
-                    </property>
-                   </widget>
-                   <widget class="QCheckBox" name="checkBoxClassification_2">
-                    <property name="geometry">
-                     <rect>
-                      <x>230</x>
-                      <y>40</y>
-                      <width>71</width>
-                      <height>31</height>
-                     </rect>
-                    </property>
-                    <property name="text">
-                     <string>Malignant</string>
-                    </property>
-                    <property name="tristate">
-                     <bool>false</bool>
-                    </property>
-                   </widget>
                    <widget class="QTextBrowser" name="textRModelClassification">
                     <property name="geometry">
                      <rect>
@@ -2651,6 +2930,35 @@ border-radius:5px;</string>
                     <property name="styleSheet">
                      <string notr="true">background-color: rgb(44, 49, 60);
 border-radius:5px;</string>
+                    </property>
+                   </widget>
+                   <widget class="QRadioButton" name="radioNBenin">
+                    <property name="geometry">
+                     <rect>
+                      <x>140</x>
+                      <y>36</y>
+                      <width>82</width>
+                      <height>41</height>
+                     </rect>
+                    </property>
+                    <property name="text">
+                     <string>Benin</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QRadioButton" name="radioNMalignant">
+                    <property name="geometry">
+                     <rect>
+                      <x>230</x>
+                      <y>30</y>
+                      <width>82</width>
+                      <height>51</height>
+                     </rect>
+                    </property>
+                    <property name="text">
+                     <string>Malignant</string>
                     </property>
                    </widget>
                   </widget>
@@ -2937,7 +3245,7 @@ border-radius:5px;
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>10</pointsize>
+                         <pointsize>11</pointsize>
                         </font>
                        </property>
                        <property name="sizeAdjustPolicy">
@@ -2991,7 +3299,7 @@ border-radius:5px;
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>10</pointsize>
+                         <pointsize>11</pointsize>
                         </font>
                        </property>
                        <property name="sizeAdjustPolicy">
@@ -3045,7 +3353,7 @@ border-radius:5px;
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>10</pointsize>
+                         <pointsize>11</pointsize>
                         </font>
                        </property>
                        <property name="sizeAdjustPolicy">
@@ -3099,7 +3407,7 @@ border-radius:5px;
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>10</pointsize>
+                         <pointsize>11</pointsize>
                         </font>
                        </property>
                        <property name="sizeAdjustPolicy">
@@ -3153,7 +3461,7 @@ border-radius:5px;
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>10</pointsize>
+                         <pointsize>11</pointsize>
                         </font>
                        </property>
                        <property name="sizeAdjustPolicy">
@@ -3207,7 +3515,7 @@ border-radius:5px;
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>10</pointsize>
+                         <pointsize>11</pointsize>
                         </font>
                        </property>
                        <property name="sizeAdjustPolicy">
@@ -3415,6 +3723,7 @@ border-radius:5px;
  </customwidgets>
  <resources>
   <include location="resources.qrc"/>
+  <include location="../../.designer/backup/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

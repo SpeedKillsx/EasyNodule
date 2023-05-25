@@ -6,15 +6,12 @@ from invoice import MakePDF
 from Custom_Widgets.Widgets import *
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 import numpy as np
 from PIL import Image
 from Preporcessing import *
 from Database_methods import *
-import datetime
-import multiprocessing as mp
 class MainWindow(QMainWindow):
     def LoadModels(self):
         path_modelX = "Models\ModelX\capsule-5"
@@ -39,7 +36,19 @@ class MainWindow(QMainWindow):
             #! Load all models
             self.LoadModels()
             #! Make a prediction
-            classification = final_predMAJOR(self.Nodule3D[:,:,32], self.Nodule3D[:,32,:],self.Nodule3D[32,:,:],self.ModelX,self.ModelY,self.ModelZ)
+            if (self.ClassMethode == 0):
+                print("major")
+                classification = final_predMAJOR(self.Nodule3D[:,:,32], self.Nodule3D[:,32,:],self.Nodule3D[32,:,:],self.ModelX,self.ModelY,self.ModelZ)
+            if (self.ClassMethode == 1):
+                print("seuil")
+                classification = final_pred(self.Nodule3D[:,:,32], self.Nodule3D[:,32,:],self.Nodule3D[32,:,:],self.ModelX,self.ModelY,self.ModelZ)
+            if (self.ClassMethode == 2):
+                print("thj")
+                classification = thj_pred(self.Nodule3D[:,:,32], self.Nodule3D[:,32,:],self.Nodule3D[32,:,:],self.ModelX,self.ModelY,self.ModelZ)
+            if (self.ClassMethode == 3):
+                print("strict")
+                classification = final_predSTRICT(self.Nodule3D[:,:,32], self.Nodule3D[:,32,:],self.Nodule3D[32,:,:],self.ModelX,self.ModelY,self.ModelZ)
+            
             result = None
             if classification == 0:
                 result="The nodule is Benin"
@@ -71,9 +80,13 @@ class MainWindow(QMainWindow):
             #print(valX[0])
             if(valX[0] == 0):
                 self.ui.textXClasse.setText("Benin")
+                #print("X benin")
             else:
                 self.ui.textXClasse.setText("Malignant")
-                
+                #print("Xmalin")
+            prX = prX.numpy()
+            #print(prX)
+            #print("PRCG X  ",round(np.max(prX)*100,2))
             self.ui.textXPctg.setText(str(round(np.max(prX)*100,2)))
             
             ##! Y Classification
@@ -82,7 +95,7 @@ class MainWindow(QMainWindow):
                 self.ui.textYClasse.setText("Benin")
             else:
                 self.ui.textYClasse.setText("Malignant")
-             
+            prY = prY.numpy() 
             self.ui.textYPctg.setText(str(round(np.max(prY)*100,2)))
             ##! Z Classification
             prZ, valZ = predict_proba(self.ModelZ,tf.expand_dims(Preprocessing(self.Nodule3D[32,:,:]),0))
@@ -90,11 +103,12 @@ class MainWindow(QMainWindow):
                 self.ui.textZClasse.setText("Benin")
             else:
                 self.ui.textZClasse.setText("Malignant")
-             
+            
+            prZ = prZ.numpy() 
             self.ui.textZPctg.setText(str(round(np.max(prZ)*100,2)))
             self.ui.textFinalClassification.setText(result)
-            self.PatientID = ""
-            self.PSelected = False
+            #self.PatientID = ""
+            #self.PSelected = False
             
         else:
             #! Patient ID save and Name and all information
@@ -190,46 +204,63 @@ class MainWindow(QMainWindow):
             if(self.ui.textNamePADD.toPlainText()!="" and self.ui.textWilayaPADD.toPlainText()!="" and self.ui.dateEditPADD.text()!="" and self.ui.textSexePADD.toPlainText()!="" and self.ui.textAllergiesPADD.toPlainText()!="" and self.ui.textSmokingPADD.toPlainText() !="" and self.ui.textMedHistPADD.toPlainText()!=""and self.ui.textEmailPADD.toPlainText()!="" and self.ui.textNumberPADD.toPlainText() !=""):
                     if len(self.ui.textNumberPADD.toPlainText()) == 10:
                         #value_familly = 0
-                        PatientInsert(self.ui.textNamePADD.toPlainText(),
-                                    self.ui.dateEditPADD.text(),
-                                    self.ui.textWilayaPADD.toPlainText(),
-                                    self.ui.textSexePADD.toPlainText(),
-                                    self.ui.textAllergiesPADD.toPlainText(),
-                                    self.ui.textSmokingPADD.toPlainText(),
-                                    self.ui.textMedHistPADD.toPlainText(),
-                                    self.ui.textCancerFamillyPADD.toPlainText(),
-                                    self.ui.textEmailPADD.toPlainText(),
-                                    self.ui.textNumberPADD.toPlainText()
-                                    )
-                        self.ui.addPateintBtn.hide()
-                        self.ui.label_addPName.hide()
-                        self.ui.label_addPWilaya.hide()
-                        self.ui.label_addPWilaya_2.hide()
-                        self.ui.label_addPSexe.hide()
-                        self.ui.label_addPAllergies.hide()
-                        self.ui.label_addPSmoking.hide()
-                        self.ui.label_addPCancerFamilly.hide()
-                        self.ui.label_addPMedHist.hide()
-                        self.ui.label_addPEmail.hide()
-                        self.ui.label_addPNumber.hide()
-                        
-                        self.ui.textNamePADD.hide()
-                        self.ui.textWilayaPADD.hide()
-                        self.ui.dateEditPADD.hide()
-                        self.ui.textSexePADD.hide()
-                        self.ui.textAllergiesPADD.hide()
-                        self.ui.textSmokingPADD.hide()
-                        self.ui.textCancerFamillyPADD.hide()
-                        self.ui.textMedHistPADD.hide()
-                        self.ui.textEmailPADD.hide()
-                        self.ui.textNumberPADD.hide()
-                        self.add_data()
-                        self.msg.setText("Patient added succefully.")
-                        self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                        self.msg.exec_()
+                        if((self.ui.textSmokingPADD.toPlainText()== "1") or (self.ui.textSmokingPADD.toPlainText()== "0")):
+                            if((self.ui.textCancerFamillyPADD.toPlainText() == "1") or (self.ui.textCancerFamillyPADD.toPlainText() == "0")):
+                                if((self.ui.textSexePADD.toPlainText() == "male")or (self.ui.textSexePADD.toPlainText() == "female")):
+                                    
+                                    PatientInsert(self.ui.textNamePADD.toPlainText(),
+                                                self.ui.dateEditPADD.text(),
+                                                self.ui.textWilayaPADD.toPlainText(),
+                                                self.ui.textSexePADD.toPlainText(),
+                                                self.ui.textAllergiesPADD.toPlainText(),
+                                                self.ui.textSmokingPADD.toPlainText(),
+                                                self.ui.textMedHistPADD.toPlainText(),
+                                                self.ui.textCancerFamillyPADD.toPlainText(),
+                                                self.ui.textEmailPADD.toPlainText(),
+                                                self.ui.textNumberPADD.toPlainText()
+                                                )
+                                    self.ui.addPateintBtn.hide()
+                                    self.ui.label_addPName.hide()
+                                    self.ui.label_addPWilaya.hide()
+                                    self.ui.label_addPWilaya_2.hide()
+                                    self.ui.label_addPSexe.hide()
+                                    self.ui.label_addPAllergies.hide()
+                                    self.ui.label_addPSmoking.hide()
+                                    self.ui.label_addPCancerFamilly.hide()
+                                    self.ui.label_addPMedHist.hide()
+                                    self.ui.label_addPEmail.hide()
+                                    self.ui.label_addPNumber.hide()
+                                    
+                                    self.ui.textNamePADD.hide()
+                                    self.ui.textWilayaPADD.hide()
+                                    self.ui.dateEditPADD.hide()
+                                    self.ui.textSexePADD.hide()
+                                    self.ui.textAllergiesPADD.hide()
+                                    self.ui.textSmokingPADD.hide()
+                                    self.ui.textCancerFamillyPADD.hide()
+                                    self.ui.textMedHistPADD.hide()
+                                    self.ui.textEmailPADD.hide()
+                                    self.ui.textNumberPADD.hide()
+                                    self.add_data()
+                                    self.msg.setText("Patient added succefully.")
+                                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                                    self.msg.exec_()
+                                else :
+                                    
+                                    self.msg.setText("If the patient is a male, write 'male' ; otherwise, write 'female' !")
+                                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                                    self.msg.exec_()     
+                            else :
+                                self.msg.setText("If the patient has a family member with cancer, write '1' ; otherwise, write '0' !")
+                                self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                                self.msg.exec_() 
+                        else:
+                            self.msg.setText("If the patient smokes, write '1' ; otherwise, write '0' !")
+                            self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                            self.msg.exec_()            
                     else:
                         
-                        self.msg.setText("Incorrect Number Phone.")
+                        self.msg.setText("Incorrect phone number !")
                         self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                         self.msg.exec_()
             else:
@@ -336,8 +367,6 @@ class MainWindow(QMainWindow):
                 self.ui.tableWidget.setItem(row_count-1, 10, phone_item)
                 
         self.ui.tableWidget.horizontalHeader().setStretchLastSection(True)
-    
-            
     #? Select a file from the desktop
     def clicker(self):
         if self.PSelected == True:
@@ -417,65 +446,92 @@ class MainWindow(QMainWindow):
             self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             self.msg.exec_()
             
-    #? Add consultation and nodule to the database
-    def saveReport(self):
-        self.Cid = self.ui.textIdC.toPlainText()
-        self.Cname = self.ui.textNameC.toPlainText()
-        
-        #ICI On Ajoute a la BDD Consultation et on récupère IdConsultation
-        if SearchConsultation(self.Cid, self.PatientIDTemp,datetime.date.today()) == -1:
-            print("ici dans le if de consultation")
-            ConsultationInsert(self.Cid, self.PatientIDTemp, datetime.date.today(), self.ui.plainTextEdit.toPlainText())
-            self.CSid = ConsultationID(self.PatientIDTemp, self.Cid, datetime.date.today())
-            print("csid = ", self.CSid[0])
-            #! Add nodule to the database
-            self.msg.setText("Consultation added succefully")
-            self.msg.exec_()
-            ###################################################################
-            #checkBox
-            if (self.ui.checkBoxClassification.isChecked() and self.ui.checkBoxClassification_2.isChecked()):
-                self.ui.checkBoxClassification_2.setChecked(False)
-                self.ui.checkBoxClassification.setChecked(False)
-                self.msg.setText("Please, Choose the right Classification !")
-                self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                self.msg.exec_()
-                
-            elif((self.ui.checkBoxClassification.isChecked()==False) and (self.ui.checkBoxClassification_2.isChecked()==False)):
-                self.msg.setText("Please, Choose the right Classification !")
-                self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                self.msg.exec_()
-            else:
-                #print(self.ui.textRPname.toPlainText())
-                if((self.ui.textRPname.toPlainText() != "") and (self.ui.plainTextEdit.toPlainText() != "")):
-                    if self.ui.textRModelClassification.toPlainText() =="Benin":
-                        NoduleInsert(str(self.CSid[0]), self.PatientIDTemp, np.load(self.scan, allow_pickle=True),0)
-                        self.msg.setText("nodule added succefully")
-                        self.msg.exec_()
-                    else:
-                        NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),1)
-                        self.msg.setText("nodule added succefully")
-                        self.msg.exec_()
-                    #print("oui")
-                    if(self.ui.checkBoxClassification.isChecked()):
-                        MakePDF(self.ui.textRPname.toPlainText(), self.CSid[0] , self.PatientID ,self.ui.textRPwilaya.toPlainText() ,  self.ui.textRPphone.toPlainText() , self.ui.textRPemail.toPlainText(), self.ui.textRModelClassification.toPlainText() , "Benin" , self.ui.plainTextEdit.toPlainText() , self.Cname , self.Cid) 
-                    else:
-                        MakePDF(self.ui.textRPname.toPlainText(), self.CSid[0] , self.PatientID ,self.ui.textRPwilaya.toPlainText() ,  self.ui.textRPphone.toPlainText() , self.ui.textRPemail.toPlainText(), self.ui.textRModelClassification.toPlainText() , "Malignant" , self.ui.plainTextEdit.toPlainText() , self.Cname , self.Cid) 
-                    
-                    self.msg.setText("Your Report is saved correctly !")
-                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    self.msg.exec_()
-        else:
-            self.msg.setText("Cant add this consultation")
-            self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            self.msg.exec_()
+    def ChooseClassificationMethode(self):
+        if self.ui.radioMajor.isChecked() :
+            self.ClassMethode = 0 
+            self.ui.label_CM.setText("Majority")
+        if self.ui.radioThresholding.isChecked() :
+            self.ClassMethode = 1
+            self.ui.label_CM.setText("Thresholding")
+        if self.ui.radioGameTheory.isChecked() :
+            self.ClassMethode = 2
+            self.ui.label_CM.setText("Game Theory")
+        if self.ui.radioStrict.isChecked() :
+            self.ClassMethode = 3  
+            self.ui.label_CM.setText("Strict")
             
-    # show nodule
+    
+        print("methode ",self.ClassMethode)          
     def showNodule(self):
         temp = self.scan
         import subprocess
         command = 'contours.py ' # Remplacez 'dir' par la commande de votre choix
         # Exécute la commande CMD et récupère la sortie
         subprocess.Popen(["python", command, temp])
+    
+    
+    def NodClassification(self):
+        self.ui.label_waiting.setText("Please wait !")
+        self.StartClassification()  
+        self.ui.label_waiting.setText("")  
+    
+    
+    def saveReport(self):
+        self.Cid = self.ui.textIdC.toPlainText()
+        self.Cname = self.ui.textNameC.toPlainText()
+        
+        #ICI On Ajoute a la BDD Consultation et on récupère IdConsultation
+        
+        #self.CSid ="PS44740"
+        #ICI On Ajoute a la BDD Consultation et on récupère IdConsultation
+        if SearchConsultation(self.Cid, self.PatientIDTemp,datetime.date.today()) == -1:
+            ConsultationInsert(self.Cid, self.PatientIDTemp, datetime.date.today(), self.ui.plainTextEdit.toPlainText())
+            self.CSid = ConsultationID(self.PatientIDTemp, self.Cid, datetime.date.today())
+            print("csid = ", self.CSid[0])
+            #! Add nodule to the database
+            
+            self.msg.setText("Consultation added succefully")
+            self.msg.exec_()
+        
+        else : 
+            self.msg.setText("Consultation is not added, please check out the patient's information ! ")
+            self.msg.exec_()
+        ###################################################################
+        #Radio
+       
+      
+        if((self.ui.textRPname.toPlainText() != "") and (self.ui.plainTextEdit.toPlainText() != "")):
+                #print("oui")
+                if self.ui.textRModelClassification.toPlainText() =="Benin":
+                    NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),0)
+                    self.msg.setText("nodule added succefully")
+                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    self.msg.exec_()
+                else:
+                    NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),1)
+                    self.msg.setText("nodule added succefully")
+                    
+                    self.msg.exec_()
+                    
+                if(self.ui.radioNBenin.isChecked()):
+                    MakePDF(self.ui.textRPname.toPlainText(), self.CSid[0] , self.PatientID ,self.ui.textRPwilaya.toPlainText() ,  self.ui.textRPphone.toPlainText() , self.ui.textRPemail.toPlainText(), self.ui.textRModelClassification.toPlainText() , "Benin" , self.ui.plainTextEdit.toPlainText() , self.Cname , self.Cid) 
+                    self.msg.setText("Your Report is saved correctly !")
+                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    self.msg.exec_()    #print(self.ui.textRPname.toPlainText())
+                elif(self.ui.radioNMalignant.isChecked()):
+                    MakePDF(self.ui.textRPname.toPlainText(), self.CSid[0] , self.PatientID ,self.ui.textRPwilaya.toPlainText() ,  self.ui.textRPphone.toPlainText() , self.ui.textRPemail.toPlainText(), self.ui.textRModelClassification.toPlainText() , "Malignant" , self.ui.plainTextEdit.toPlainText() , self.Cname , self.Cid) 
+                    self.msg.setText("Your Report is saved correctly !")
+                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    self.msg.exec_()    #print(self.ui.textRPname.toPlainText())
+                else:
+                    self.msg.setText("Please, Select your Classification !")
+                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    self.msg.exec_()    #print(self.ui.textRPname.toPlainText())
+                
+            
+                
+                
+                     
     def __init__(self, parent=None):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
@@ -521,6 +577,9 @@ class MainWindow(QMainWindow):
         self.Cname = ""
         self.Cid = ""
         self.CSid = ""
+        #Classification méthode
+        self.ClassMethode = 0
+        
         #expand center menu size
         self.ui.settingsBtn.clicked.connect(lambda: self.ui.centerMenuContainer.expandMenu())
         self.ui.infoBtn.clicked.connect(lambda: self.ui.centerMenuContainer.expandMenu())
@@ -566,14 +625,17 @@ class MainWindow(QMainWindow):
         self.ui.closeNotificationBtn.clicked.connect(lambda: self.ui.popupNotificationContainer.collapseMenu())
         
         # Classification
-        self.ui.startClassificationBtn.clicked.connect(self.StartClassification)
+        self.ui.startClassificationBtn.clicked.connect(self.NodClassification)
         #Patient research
         self.ui.researchPatientBtn.clicked.connect(self.ResearchPatient)
         ##############################################################################################
         # No modification is allowed in the table
         self.ui.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.ui.tableWidget.setHorizontalHeaderLabels(["Patient ID", "Name", "Birth", "Wilaya", "Sex", "Allergies", "Smoking", "Medical history", "Cancer Family", "Email", "Phone"])
-
+        # Personnalisation du style des titres de colonnes
+        header_style = "::section { background-color: #333; color: white; }"
+        self.ui.tableWidget.horizontalHeader().setStyleSheet(header_style)
+        
         self.ui.label_addPName.hide()
         self.ui.label_addPWilaya.hide()
         self.ui.label_addPWilaya_2.hide()
@@ -605,12 +667,22 @@ class MainWindow(QMainWindow):
         self.ui.choosePateintBtn.clicked.connect(self.PatientSelect)
         
         #hide waiting
-        self.ui.label_waiting.hide()
+        self.ui.label_waiting.setText("")
         
         #Save report
         self.ui.saveReportBtn.clicked.connect(self.saveReport)
         # Show nodule
         self.ui.showNoduleRBtn.clicked.connect(self.showNodule)
+        # Choose classification methode
+        self.ui.classificationMethodeBtn.clicked.connect(self.ChooseClassificationMethode)
+        
+        #
+        self.ui.textBrowserGuide.setOpenExternalLinks(True)
+        self.ui.textBrowserGuide.append('<a href=https://drive.google.com/file/d/1hkQrMOivxnh7-qVpXAUndPckf9Svx9ts/view?usp=share_link>MethodesPdf</>')
+        
+        self.ui.textBrowserGuidePDF.setOpenExternalLinks(True)
+        self.ui.textBrowserGuidePDF.append('<a href=https://drive.google.com/file/d/1AajI1ZAqvS4_DDgNjJGHC6IOsWSOpm47/view?usp=sharing>______Guide_____</>')
+        
          
 
 if __name__ == '__main__':

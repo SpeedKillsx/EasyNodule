@@ -20,6 +20,7 @@ class Ui_Form(object):
                 self.ui = Ui_FormSign()
                 self.ui.setupUi(self.window)
                 self.window.show()
+                
                 #MainWindow = QtWidgets.QMainWindow()
                 
                 #loadJsonStyle(self, self.ui)
@@ -32,7 +33,7 @@ class Ui_Form(object):
                 Form.resize(361, 460)
                 Form.setWindowFlags(QtCore.Qt.FramelessWindowHint)
                 Form.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-                icon = QIcon("ressources/logo.ico")
+                icon = QIcon("ressources/logo.png")
                 Form.setWindowIcon(icon)
                 self.widget = QtWidgets.QWidget(Form)
                 self.widget.setGeometry(QtCore.QRect(0, -10, 331, 451))
@@ -80,7 +81,7 @@ class Ui_Form(object):
                
                 self.label = QtWidgets.QLabel(self.widget)
                 self.label.setGeometry(QtCore.QRect(30, 19, 300, 431))
-                self.label.setStyleSheet("border-image: url(:/images/bg.jpg);\n"
+                self.label.setStyleSheet("border-image: url(ressources/bg.jpg);\n"
         "border-radius : 20px;")
                 self.label.setText("")
                 self.label.setObjectName("label")
@@ -105,7 +106,7 @@ class Ui_Form(object):
                 self.label_4.setFont(font)
                 self.label_4.setStyleSheet("color: rgba(255,255,255,210);")
                 self.label_4.setText("")
-                self.label_4.setPixmap(QtGui.QPixmap(":/images/logo.png"))
+                self.label_4.setPixmap(QtGui.QPixmap("ressources/logo.png"))
                 self.label_4.setScaledContents(True)
                 self.label_4.setObjectName("label_4")
                 self.usernameEdit = QtWidgets.QLineEdit(self.widget)
@@ -163,7 +164,7 @@ class Ui_Form(object):
         "")
                 self.emailBtn.setText("")
                 icon = QtGui.QIcon()
-                icon.addPixmap(QtGui.QPixmap(":/images/gmail.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                icon.addPixmap(QtGui.QPixmap("ressources/gmail.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.emailBtn.setIcon(icon)
                 self.emailBtn.setIconSize(QtCore.QSize(24, 24))
                 self.emailBtn.setObjectName("emailBtn")
@@ -176,7 +177,7 @@ class Ui_Form(object):
                 self.callBtn.setStyleSheet("background-color: rgba(0, 0, 0,0);")
                 self.callBtn.setText("")
                 icon1 = QtGui.QIcon()
-                icon1.addPixmap(QtGui.QPixmap(":/images/appel-telephonique.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                icon1.addPixmap(QtGui.QPixmap("ressources/appel-telephonique.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.callBtn.setIcon(icon1)
                 self.callBtn.setIconSize(QtCore.QSize(24, 24))
                 self.callBtn.setObjectName("callBtn")
@@ -208,8 +209,12 @@ class Ui_Form(object):
                 QtCore.QMetaObject.connectSlotsByName(Form)
                 #print(self.usernameEdit.text())
                 self.loginBtn.clicked.connect(self.ClinicianLogin)
-                
-
+                #self.emailBtn.setOpenExternalLinks(True)
+                self.emailBtn.clicked.connect(self.open_link)
+                self.callBtn.clicked.connect(self.open_link)
+        def open_link(self):
+                url = QUrl("https://drive.google.com/file/d/16wh7hh8rl0yvVge2lV-P3Yvgt4WKaMDZ/view?usp=sharing")
+                QDesktopServices.openUrl(url)
         def retranslateUi(self, Form):
                 _translate = QtCore.QCoreApplication.translate
                 Form.setWindowTitle(_translate("Form", "Form"))

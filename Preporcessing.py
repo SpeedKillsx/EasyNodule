@@ -259,3 +259,434 @@ def final_predMAJOR(imgX, imgY, imgZ, modelx, modely, modelz):
             if (valX[0]== valZ[0]):
                 #list_def_ref.append([i, imgX,None, imgZ])
                 return valX[0]
+            
+            
+def final_predSTRICT(imgX, imgY, imgZ, modelx, modely, modelz):
+    imgX = Preprocessing(imgX)
+    imgY = Preprocessing(imgY)
+    imgZ = Preprocessing(imgZ)
+    probaX, valX = predict_proba(modelx, tf.expand_dims(imgX, 0))
+    probaY, valY = predict_proba(modely, tf.expand_dims(imgY, 0))
+    probaZ, valZ = predict_proba(modelz, tf.expand_dims(imgZ, 0))
+    somme = 0
+    if (valX[0] == valY[0]) and (valY[0]== valZ[0]):
+        return valX[0]
+    else:
+        return 1
+    
+    
+def calcEnergy(Image):
+
+    img = Image
+    img = np.expand_dims(img, 0)
+    #print(img.shape)
+    #img = np.expand_dims(img, -1)
+    filtered_img = tfio.experimental.filter.gabor(img, freq=0.7 , theta=0.9 )
+    #print(filtered_img.shape)
+    #* reduire la dimmension de l'image
+    filtered_img = tf.squeeze(filtered_img, 0)
+    filtered_img = tf.cast(filtered_img, dtype="float32")
+    return np.sum(np.abs(filtered_img))
+
+from scipy.spatial.distance import directed_hausdorff
+def calcHaussdorff(image_reference, image_test2):
+    image_ref = tf.squeeze(image_reference, -1)
+    image_test = tf.squeeze(image_test2, -1)
+
+
+    return max(directed_hausdorff(image_test, image_ref)[0], directed_hausdorff(image_ref, image_test)[0])
+
+
+import numpy.linalg as npl
+import cv2
+def calcRho(image_reference, image_test2):
+    B = tf.squeeze(image_reference, -1)
+    A = tf.squeeze(image_test2, -1)
+    #AtA - BtB
+    mat1 = np.subtract( np.dot(np.transpose(A),A) ,  np.dot(np.transpose(B),B))
+
+    #rho(ATA)
+    (valp,vecp)=npl.eig(mat1)
+    
+    return max(abs(valp))
+
+#LA TEXTURE
+from skimage.feature import greycomatrix, greycoprops
+from tensorflow.python.ops.numpy_ops import np_config
+np_config.enable_numpy_behavior()
+
+def Texture(image_test2):
+    # Lecture de l'image
+    imgg = image_test2[:,:,0]
+    img = (imgg * 255).astype(np.uint8)
+    #print("hey",img.shape)
+
+    # Calcul de la matrice de co-occurrence de niveaux de gris
+    glcm = greycomatrix(img, [1], [0], levels=256)
+
+    # Calcul des propriétés de texture à partir de la matrice de co-occurrence
+    
+    homogeneity = greycoprops(glcm, 'homogeneity')
+    homogeneity = homogeneity[0][0]
+    energy = greycoprops(glcm, 'energy')
+    energy = energy[0][0]
+    #print("energy",energy)
+
+    # Affichage des résultats
+    #print("Contrast: ", contrast)
+    #print("Homogeneity: ", homogeneity)
+    #print("Energy: ", energy)
+    return energy,homogeneity
+def Contours(image_test2):
+    # Lecture de l'image
+    imgg = image_test2[:,:,0]
+    img = (imgg * 255).astype(np.uint8)
+
+# Application du filtre de Sobel pour détecter les bords de l'image
+    sobelx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=5)
+    sobely = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=5)
+    sobel = cv2.addWeighted(sobelx, 0.3, sobely, 0.3, 0)
+    sobel = cv2.convertScaleAbs(sobel)
+
+# Seuillage de l'image pour ne garder que les bords les plus significatifs
+    _, thresh = cv2.threshold(sobel, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+# Application d'un filtre morphologique pour supprimer les petits artefacts
+    kernel = np.ones((7,7),np.uint8)
+    thresh = cv2.morphologyEx(thresh, cv2.MORPH_DILATE, kernel)
+    thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+
+    # Extraction des contours des vaisseaux sanguins
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #plt.imshow(thresh,'gray')
+    #print(len(contours))
+    return len(contours)
+
+def divideReference(DataImages, DataLabels, dataReference):
+    zero_list =[]
+    one_list = []
+    for i in range(dataReference.shape[0]):
+        if DataLabels[dataReference[i]] == 0:
+            zero_list.append(DataImages[dataReference[i]])
+        else:
+            one_list.append(DataImages[dataReference[i]])
+    return np.array(zero_list),np.array(one_list)
+import nashpy as nash
+def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
+    
+    X_refZ= np.load("THJdata/X_refZ.npy", allow_pickle=True)
+    X_refO = np.load("THJdata/X_refO.npy", allow_pickle=True)
+    Y_refZ = np.load("THJdata/Y_refZ.npy", allow_pickle=True)
+    Y_refO = np.load("THJdata/Y_refO.npy", allow_pickle=True)
+    Z_refZ = np.load("THJdata/Z_refZ.npy", allow_pickle=True)
+    Z_refO = np.load("THJdata/Z_refO.npy", allow_pickle=True) 
+    
+    #--------------------------------------------------------------------------------    
+    #Calcul de RHE pour X avec NORMALISATION:
+    ## Energy max
+    ListEnergy = []
+ 
+    ## Hauss max
+    ListHauss = []
+    
+    ## Max RHO
+    ListRHO = []
+    
+    ## EnergyCo-occurence max
+    ListEnergyCo = []
+    
+    if(valX == 0):
+        # Boucle pour l'energie, hauss, rho
+        #for i in range(X_refZ.shape[0]):
+        #    ListEnergy.append(calcEnergy(X_refZ[i]))
+        
+        for i in range(X_refZ.shape[0]):
+            ListHauss.append(calcHaussdorff(X_refZ[i], imgX))
+            
+        for i in range(X_refZ.shape[0]):
+            ListRHO.append(calcRho(X_refZ[i], imgX))
+            
+        #for i in range(X_refZ.shape[0]):
+         #   ListEnergyCo.append(Texture(X_refZ[i]))    
+        # Fin
+        #------------------------------------------------------------
+        
+        #Calcul du rho pour X avec X_refZ 
+        RX = min(ListRHO)/max(ListRHO)
+        #Calcul du dist Rhoss pour X avec X_refZ
+        HX = min(ListHauss)/max(ListHauss)
+        #Calcul du Energy pour X avec X_refZ
+        #EX = calcEnergy(imgX)/max(ListEnergy)
+        #Calcul du EnergyCo pour X avec X_refZ
+        imgXX = imgX.numpy()
+        EXC,OMX = Texture(imgXX)
+        EXC = EXC.astype(np.float64)
+        OMX = OMX.astype(np.float64)
+        
+    else:
+        # Boucle pour l'energie, hauss, rho
+        #for i in range(X_refO.shape[0]):
+         #   ListEnergy.append(calcEnergy(X_refO[i]))
+        
+        for i in range(X_refO.shape[0]):
+            ListHauss.append(calcHaussdorff(X_refO[i], imgX))
+            
+        for i in range(X_refO.shape[0]):
+            ListRHO.append(calcRho(X_refO[i], imgX))
+            
+        #for i in range(X_refO.shape[0]):
+         #   ListEnergyCo.append(Texture(X_refO[i]))     
+        # Fin
+        #------------------------------------------------------------
+        
+        #Calcul du rho pour X avec X_refO
+        RX = min(ListRHO)/max(ListRHO)
+        #Calcul du dist Rhoss pour X avec X_refO
+        HX = min(ListHauss)/max(ListHauss)
+        #Calcul du Energy pour X avec X_refO  
+        #EX = calcEnergy(imgX)/max(ListEnergy)
+        #Calcul du EnergyCo pour X avec X_refZ
+        imgXX = imgX.numpy()
+        EXC,OMX = Texture(imgXX)
+        EXC = EXC.astype(np.float64)
+        OMX = OMX.astype(np.float64)
+     
+    #--------------------------------------------------------------------------------  
+    ## Energy max
+    ListEnergy = []
+ 
+    ## Hauss max
+    ListHauss = []
+    
+    ## Max RHO
+    ListRHO = [] 
+    ## EnergyCo-occurence max
+    ListEnergyCo = []
+    #Calcul de RHE pour Y avec NORMALISATION:
+    if(valY == 0):
+        # Boucle pour l'energie, hauss, rho
+        #for i in range(Y_refZ.shape[0]):
+        #    ListEnergy.append(calcEnergy(Y_refZ[i]))
+        
+        for i in range(Y_refZ.shape[0]):
+            ListHauss.append(calcHaussdorff(Y_refZ[i], imgY))
+            
+        for i in range(Y_refZ.shape[0]):
+            ListRHO.append(calcRho(Y_refZ[i], imgY))
+            
+        #for i in range(Y_refZ.shape[0]):
+         #   ListEnergyCo.append(Texture(Y_refZ[i]))     
+        # Fin
+        #------------------------------------------------------------
+        #Calcul du rho pour Y avec Y_refZ
+        RY = min(ListRHO)/max(ListRHO)
+        #Calcul du dist Rhoss pour Y avec Y_refZ
+        HY = min(ListHauss)/max(ListHauss)
+        #Calcul du Energy pour Y avec Y_refZ
+        #EY = calcEnergy(imgY)/max(ListEnergy)
+        #Calcul du EnergyCo pour X avec X_refZ
+        imgYY = imgY.numpy()
+        EYC,OMY = Texture(imgYY)
+        EYC = EYC.astype(np.float64) 
+        OMY = OMY.astype(np.float64) 
+        
+    else:
+        
+        #for i in range(Y_refO.shape[0]):
+         #  ListEnergy.append(calcEnergy(Y_refO[i]))
+    
+        for i in range(Y_refO.shape[0]):
+            ListHauss.append(calcHaussdorff(Y_refO[i], imgY))
+            
+        for i in range(Y_refO.shape[0]):
+            ListRHO.append(calcRho(Y_refO[i], imgY))
+            
+        #for i in range(Y_refO.shape[0]):
+         #   ListEnergyCo.append(Texture(Y_refO[i])) 
+        # Fin
+        #------------------------------------------------------------
+        #Calcul du rho pour Y avec Y_refO
+        RY = min(ListRHO)/max(ListRHO)
+        #Calcul du dist Rhoss pour Y avec Y_refO
+        HY = min(ListHauss)/max(ListHauss)
+        #Calcul du Energy pour Y avec Y_refO  
+        #EY = calcEnergy(imgY)/max(ListEnergy)
+        #Calcul du EnergyCo pour X avec X_refZ
+        imgYY = imgY.numpy()
+        EYC,OMY = Texture(imgYY)
+        EYC = EYC.astype(np.float64) 
+        OMY = OMY.astype(np.float64)
+        
+    #--------------------------------------------------------------------------------        
+    #!Calcul de RHE pour Z avec NORMALISATION:
+    ## Energy max
+    ListEnergy = []
+ 
+    ## Hauss max
+    ListHauss = []
+    
+    ## Max RHO
+    ListRHO = []
+    ## EnergyCo-occurence max
+    ListEnergyCo = []
+    
+    if(valZ == 0):
+        #for i in range(Z_refZ.shape[0]):
+         #  ListEnergy.append(calcEnergy(Z_refZ[i]))
+    
+        for i in range(Z_refZ.shape[0]):
+            ListHauss.append(calcHaussdorff(Z_refZ[i], imgZ))
+            
+        for i in range(Z_refZ.shape[0]):
+            ListRHO.append(calcRho(Z_refZ[i], imgZ))
+            
+        #for i in range(Z_refZ.shape[0]):
+         #   ListEnergyCo.append(Texture(Z_refZ[i]))     
+        # Fin
+        #------------------------------------------------------------
+        #Calcul du rho pour Z avec Z_refZ 
+        RZ = min(ListRHO)/max(ListRHO)
+        #Calcul du dist Rhoss pour Z avec Z_refZ
+        HZ = min(ListHauss)/max(ListHauss)
+        #Calcul du Energy pour Z avec Z_refZ
+        #EZ = calcEnergy(imgZ)/max(ListEnergy) 
+        #Calcul du EnergyCo pour X avec X_refZ
+        imgZZ = imgZ.numpy()
+        EZC,OMZ = Texture(imgZZ)
+        EZC = EZC.astype(np.float64)
+        OMZ = OMZ.astype(np.float64)
+    else:
+    
+        #for i in range(Z_refO.shape[0]):
+         #  ListEnergy.append(calcEnergy(Z_refO[i]))
+    
+        for i in range(Z_refO.shape[0]):
+            ListHauss.append(calcHaussdorff(Z_refO[i], imgZ))
+            
+        for i in range(Z_refO.shape[0]):
+            ListRHO.append(calcRho(Z_refO[i], imgZ))
+            
+        #for i in range(Z_refO.shape[0]):
+         #   ListEnergyCo.append(Texture(Z_refO[i]))     
+        # Fin
+        #------------------------------------------------------------
+        #Calcul du rho pour Z avec Z_refO 
+        RZ = min(ListRHO)/max(ListRHO)
+        #Calcul du dist Rhoss pour Z avec Z_refO
+        HZ = min(ListHauss)/max(ListHauss)
+        #Calcul du Energy pour Z avec Z_refO
+        #EZ = calcEnergy(imgZ)/max(ListEnergy) 
+        #Calcul du EnergyCo pour X avec X_refZ
+        imgZZ = imgZ.numpy()
+        EZC,OMZ = Texture(imgZZ)
+        EZC = EZC.astype(np.float64)
+        OMZ = OMZ.astype(np.float64)
+        
+    #--------------------------------------------------------------------------------
+    BeninListe =[]
+    MalinListe=[]
+    
+    if(valX == 0):
+        BeninListe.append(RX)
+        BeninListe.append(HX)
+        #BeninListe.append(EX)
+        BeninListe.append(EXC)
+        BeninListe.append(OMX)
+    else:
+        MalinListe.append(RX)
+        MalinListe.append(HX)
+        #MalinListe.append(EX)
+        MalinListe.append(EXC)
+        MalinListe.append(OMX)
+        
+    if(valY == 0):
+        BeninListe.append(RY)
+        BeninListe.append(HY)
+        #BeninListe.append(EY)
+        BeninListe.append(EYC)
+        BeninListe.append(OMY)
+    else:
+        MalinListe.append(RY)
+        MalinListe.append(HY)
+        #MalinListe.append(EY)
+        MalinListe.append(EYC)  
+        MalinListe.append(OMY)  
+         
+        
+    if(valZ == 0):
+        BeninListe.append(RZ)
+        BeninListe.append(HZ)
+        #BeninListe.append(EZ)
+        BeninListe.append(EZC)
+        BeninListe.append(OMZ)
+    else:
+
+        MalinListe.append(RZ)
+        MalinListe.append(HZ)
+       #MalinListe.append(EZ)
+        MalinListe.append(EZC)
+        MalinListe.append(OMZ)
+    
+    #return BeninListe, MalinListe
+    #-------------------------------------------------------------------------------- 
+    #Construction de la Matrice du jeu
+    MatJeu = []
+    vecBenin = np.array(BeninListe)
+    vecMalin = np.array(MalinListe)
+
+    for i in range(vecBenin.shape[0]):
+        v1=[]
+        for j in range(vecMalin.shape[0]):
+            #Fonction d'utilité
+            ut = vecBenin[i] - vecMalin[j]
+            v1.append(ut)
+
+        MatJeu.append(v1)
+
+    #-------------------------------------------------------------------------------- 
+    #Simulation du jeu avec nashpy
+    MatJeu = np.array(MatJeu)
+    #print("matjeu ",MatJeu)
+    #print("somme ",np.sum(MatJeu))
+    jeu = nash.Game(MatJeu)
+    #print("jeu ",jeu)
+    eqs = jeu.support_enumeration()
+    a, g = next(eqs)
+    ligne = np.argmax(a)
+    col = np.argmax(g)
+    valeur_nash = MatJeu[ligne, col]
+    if valeur_nash > 0:
+        return 0
+    elif valeur_nash < 0:
+        return 1
+    else:
+        print("val nulle")
+        # Majorite
+        if (valX == valY) :
+            
+            return valZ[0]
+        else:
+            if (valY== valZ):
+                
+                return valX[0]
+            
+            else:
+                if (valX== valZ):
+                    
+                    return valY[0]
+                
+def thj_pred(imgX, imgY, imgZ, modelx, modely, modelz):
+    # Fonction de prediction avec utilisation du model de théorie des jeux
+    imgX = Preprocessing(imgX)
+    imgY = Preprocessing(imgY)
+    imgZ = Preprocessing(imgZ)
+    probaX, valX = predict_proba(modelx, tf.expand_dims(imgX, 0))
+    probaY, valY = predict_proba(modely, tf.expand_dims(imgY, 0))
+    probaZ, valZ = predict_proba(modelz, tf.expand_dims(imgZ, 0))
+    
+    if (valX[0] == valY[0]) and (valY[0]== valZ[0]):
+        return valX[0]
+    
+    else:
+        return thj_fonction(imgX, imgY, imgZ,valX[0],valY[0],valZ[0])                

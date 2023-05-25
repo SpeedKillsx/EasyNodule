@@ -138,7 +138,7 @@ border-radius : 15px;</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/images/logo.png</pixmap>
+     <pixmap resource="res.qrc">::/ressources/logo.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>

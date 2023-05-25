@@ -24,7 +24,7 @@ class Ui_FormSign(object):
                 FormSign.resize(617, 460)
                 FormSign.setWindowFlags(QtCore.Qt.FramelessWindowHint)
                 FormSign.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-                icon = QtGui.QIcon("ressources/logo.ico")
+                icon = QtGui.QIcon("ressources/logo.png")
                 FormSign.setWindowIcon(icon)
                 self.widget = QtWidgets.QWidget(FormSign)
                 self.widget.setGeometry(QtCore.QRect(0, -10, 551, 451))
@@ -72,7 +72,7 @@ class Ui_FormSign(object):
                 self.widget.setObjectName("widget")
                 self.label = QtWidgets.QLabel(self.widget)
                 self.label.setGeometry(QtCore.QRect(30, 19, 511, 431))
-                self.label.setStyleSheet("border-image: url(:/images/bg.jpg);\n"
+                self.label.setStyleSheet("border-image: url(ressources/bg.jpg);\n"
         "border-radius : 20px;")
                 self.label.setText("")
                 self.label.setObjectName("label")
@@ -231,7 +231,8 @@ class Ui_FormSign(object):
                 QtCore.QMetaObject.connectSlotsByName(FormSign)
                 self.signBtn.clicked.connect(self.ClinicianSignUp)
                 
-
+        def close_window(self):
+                self.window.close()
         def retranslateUi(self, FormSign):
                 _translate = QtCore.QCoreApplication.translate
                 FormSign.setWindowTitle(_translate("FormSign", "Form"))
@@ -266,7 +267,8 @@ class Ui_FormSign(object):
                                                 )
                                 self.msg.setText("Your are account has been created")
                                 self.msg.exec_()
-                                #self.openWindow2()
+                                
+                                
                                 
                         
                         else:
@@ -275,6 +277,8 @@ class Ui_FormSign(object):
                 else:
                         self.msg.setText("Choose another username, it's already tooken")
                         self.msg.exec_()
+                        
+                    
                         
 
                 
