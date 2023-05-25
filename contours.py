@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore, QtGui
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -12,7 +13,18 @@ class MainWindow(QMainWindow):
     
     def __init__(self, image):
         super().__init__()
+        self.setStyleSheet("*{\n"
+"    \n"
+"    \n"
+" border : none;\n"
+"background-color: rgb(31, 35, 42);\n"
 
+"padding:0px;\n"
+"marging:0px;\n"
+"}\n")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("ressources/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         # Créer une instance de la figure Matplotlib
         self.figure = Figure()
 
@@ -85,7 +97,7 @@ if __name__ == '__main__':
 
     # Créer la fenêtre principale en passant l'image en argument
     window = MainWindow(image[32,:,:])
-    window.setWindowTitle('Détection de contours')
+    window.setWindowTitle('Contours visualisation')
 
     # Afficher la fenêtre principale
     window.show()
