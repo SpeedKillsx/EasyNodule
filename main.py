@@ -391,13 +391,13 @@ class MainWindow(QMainWindow):
                     #plt.imshow(Nodule3D[10,:,:,0],'gray')
                     self.ax1 = self.figure.add_subplot(self.grid[0, 0])
                     self.ax1.imshow(self.Nodule3D[32, :, :], cmap='gray')
-                    self.ax1.set_title('Vue X')
+                    self.ax1.set_title('View X')
                     self.ax2 = self.figure.add_subplot(self.grid[0, 1])
                     self.ax2.imshow(self.Nodule3D[:, 32, :], cmap='gray')
-                    self.ax2.set_title('Vue Y')
+                    self.ax2.set_title('View Y')
                     self.ax3 = self.figure.add_subplot(self.grid[0, 2])
                     self.ax3.imshow(self.Nodule3D[:, :, 32], cmap='gray')
-                    self.ax3.set_title('Vue Z')
+                    self.ax3.set_title('View Z')
                     #refresh
                     self.canvas.draw()
                 else:

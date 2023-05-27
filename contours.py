@@ -8,20 +8,9 @@ from matplotlib.figure import Figure
 import cv2
 import numpy as np
 
-class MainWindow(QMainWindow):
-    index = 7
-    
+class MainWindow(QMainWindow):   
     def __init__(self, image):
         super().__init__()
-        self.setStyleSheet("*{\n"
-"    \n"
-"    \n"
-" border : none;\n"
-"background-color: rgb(31, 35, 42);\n"
-
-"padding:0px;\n"
-"marging:0px;\n"
-"}\n")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("ressources/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
@@ -50,8 +39,7 @@ class MainWindow(QMainWindow):
         contours = self.detecter_contours(self.image)
 
         # Afficher l'image avec les contours
-        self.afficher_image_contours(self.image, contours)
-
+        self.afficher_image_contours(self.image, contours)  
     def detecter_contours(self, image):
        
 
@@ -60,11 +48,17 @@ class MainWindow(QMainWindow):
 
         # Détecter les contours avec l'algorithme de Canny
         edges = cv2.Canny(blurred, 90, 200)
-
+        kernel = np.ones((3, 3), np.uint8)
+        closed = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel)
         # Trouver les contours dans l'image
-        contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        return contours
+        contours, _ = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        MIN_NODULE_AREA = 45
+        filtered_contours = []
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            if area > MIN_NODULE_AREA:
+                filtered_contours.append(contour)
+        return filtered_contours
 
     def afficher_image_contours(self, image, contours):
         # Créer une nouvelle figure Matplotlib
@@ -97,6 +91,33 @@ if __name__ == '__main__':
 
     # Créer la fenêtre principale en passant l'image en argument
     window = MainWindow(image[32,:,:])
+    #window.setStyleSheet("background-color: rgb(31, 35, 42);")
+
+    # Appliquer un style spécifique à la barre d'outils
+    toolbar_style = """
+        QToolBar{
+        background-color:rgb(31, 35, 42);
+        border: black;
+
+        }
+        QToolButton:hover {
+            background-color: red;
+        }
+        QToolButton:checked {
+            background-color: green;
+        }
+        QMenu {
+            background-color: yellow;
+        }
+        
+       
+        
+        
+    """
+    window.toolbar.setStyleSheet(toolbar_style)
+     # Modifier le style des fonctionnalités individuelles
+    # Modifier le style des fonctionnalités individuelles
+    
     window.setWindowTitle('Contours visualisation')
 
     # Afficher la fenêtre principale
