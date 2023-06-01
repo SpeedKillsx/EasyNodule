@@ -420,20 +420,25 @@ class MainWindow(QMainWindow):
     def handle_item_selection(self):
         selected_row = self.ui.tableWidget.currentRow()
         if selected_row >= 0:
-            self.PatientID = self.ui.tableWidget.item(selected_row, 0).text()
-            self.PatientName = self.ui.tableWidget.item(selected_row, 1).text()
-            self.PatientWilaya = self.ui.tableWidget.item(selected_row, 3).text()
-            self.PatientBirthday = self.ui.tableWidget.item(selected_row, 2).text()
-            self.PatientSexe = self.ui.tableWidget.item(selected_row, 4).text()
-            self.PatientAllergies = self.ui.tableWidget.item(selected_row, 5).text()
-            self.PatientSmoking = self.ui.tableWidget.item(selected_row, 6).text()
-            self.PatientCancerFamilly = self.ui.tableWidget.item(selected_row, 8).text()
-            self.PatientMedHist = self.ui.tableWidget.item(selected_row, 7).text()
-            self.PatientEmail = self.ui.tableWidget.item(selected_row, 9).text()
-            self.PatientPhone = self.ui.tableWidget.item(selected_row, 10).text()
-            print(self.PatientID)
-            self.PatientIDTemp = self.PatientID
-            self.PatientNameTemp = self.PatientName
+            if self.ui.tableWidget.item(selected_row, 0) is not None:
+                
+                self.PatientID = self.ui.tableWidget.item(selected_row, 0).text()
+                self.PatientName = self.ui.tableWidget.item(selected_row, 1).text()
+                self.PatientWilaya = self.ui.tableWidget.item(selected_row, 3).text()
+                self.PatientBirthday = self.ui.tableWidget.item(selected_row, 2).text()
+                self.PatientSexe = self.ui.tableWidget.item(selected_row, 4).text()
+                self.PatientAllergies = self.ui.tableWidget.item(selected_row, 5).text()
+                self.PatientSmoking = self.ui.tableWidget.item(selected_row, 6).text()
+                self.PatientCancerFamilly = self.ui.tableWidget.item(selected_row, 8).text()
+                self.PatientMedHist = self.ui.tableWidget.item(selected_row, 7).text()
+                self.PatientEmail = self.ui.tableWidget.item(selected_row, 9).text()
+                self.PatientPhone = self.ui.tableWidget.item(selected_row, 10).text()
+                print(self.PatientID)
+                self.PatientIDTemp = self.PatientID
+                self.PatientNameTemp = self.PatientName
+            else:
+                self.msg.setText("Please choose a patient from the table")
+                self.msg.exec_()
            
     def PatientSelect(self):
         if self.PatientID != "":
@@ -502,7 +507,7 @@ class MainWindow(QMainWindow):
       
         if((self.ui.textRPname.toPlainText() != "") and (self.ui.plainTextEdit.toPlainText() != "")):
                 #print("oui")
-                if self.ui.textRModelClassification.toPlainText() =="Benin":
+                """if self.ui.textRModelClassification.toPlainText() =="Benin":
                     NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),0)
                     self.msg.setText("nodule added succefully")
                     self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -511,14 +516,22 @@ class MainWindow(QMainWindow):
                     NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),1)
                     self.msg.setText("nodule added succefully")
                     
-                    self.msg.exec_()
+                    self.msg.exec_()"""
                     
                 if(self.ui.radioNBenin.isChecked()):
+                    NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),0)
+                    self.msg.setText("nodule added succefully")
+                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    self.msg.exec_()
                     MakePDF(self.ui.textRPname.toPlainText(), self.CSid[0] , self.PatientID ,self.ui.textRPwilaya.toPlainText() ,  self.ui.textRPphone.toPlainText() , self.ui.textRPemail.toPlainText(), self.ui.textRModelClassification.toPlainText() , "Benin" , self.ui.plainTextEdit.toPlainText() , self.Cname , self.Cid) 
                     self.msg.setText("Your Report is saved correctly !")
                     self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     self.msg.exec_()    #print(self.ui.textRPname.toPlainText())
                 elif(self.ui.radioNMalignant.isChecked()):
+                    NoduleInsert(self.CSid[0], self.PatientIDTemp, np.load(self.scan, allow_pickle=True),1)
+                    self.msg.setText("nodule added succefully")
+                    self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    self.msg.exec_()
                     MakePDF(self.ui.textRPname.toPlainText(), self.CSid[0] , self.PatientID ,self.ui.textRPwilaya.toPlainText() ,  self.ui.textRPphone.toPlainText() , self.ui.textRPemail.toPlainText(), self.ui.textRModelClassification.toPlainText() , "Malignant" , self.ui.plainTextEdit.toPlainText() , self.Cname , self.Cid) 
                     self.msg.setText("Your Report is saved correctly !")
                     self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
