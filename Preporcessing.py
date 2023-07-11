@@ -413,6 +413,7 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         #------------------------------------------------------------
         
         #Calcul du rho pour X avec X_refZ 
+        
         RX = min(ListRHO)/max(ListRHO)
         #Calcul du dist Rhoss pour X avec X_refZ
         HX = min(ListHauss)/max(ListHauss)
@@ -423,6 +424,13 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         EXC,OMX = Texture(imgXX)
         EXC = EXC.astype(np.float64)
         OMX = OMX.astype(np.float64)
+        print("Rho X = ",min(ListRHO))
+        print("La distance de Haussdorf X = ",min(ListHauss))
+        print("Energie X = ",EXC)
+        print("Homogénéité X = ",OMX)
+        
+        
+        
         
     else:
         # Boucle pour l'energie, hauss, rho
@@ -451,6 +459,10 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         EXC,OMX = Texture(imgXX)
         EXC = EXC.astype(np.float64)
         OMX = OMX.astype(np.float64)
+        print("Rho X = ",min(ListRHO))
+        print("La distance de Haussdorf X = ",min(ListHauss))
+        print("Energie X = ",EXC)
+        print("Homogénéité X = ",OMX)
      
     #--------------------------------------------------------------------------------  
     ## Energy max
@@ -490,6 +502,10 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         EYC,OMY = Texture(imgYY)
         EYC = EYC.astype(np.float64) 
         OMY = OMY.astype(np.float64) 
+        print("Rho Y = ",min(ListRHO))
+        print("La distance de Haussdorf Y = ",min(ListHauss))
+        print("Energie Y = ",EYC)
+        print("Homogénéité Y = ",OMY)
         
     else:
         
@@ -517,6 +533,10 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         EYC,OMY = Texture(imgYY)
         EYC = EYC.astype(np.float64) 
         OMY = OMY.astype(np.float64)
+        print("Rho Y = ",min(ListRHO))
+        print("La distance de Haussdorf Y = ",min(ListHauss))
+        print("Energie Y = ",EYC)
+        print("Homogénéité Y = ",OMY)
         
     #--------------------------------------------------------------------------------        
     #!Calcul de RHE pour Z avec NORMALISATION:
@@ -556,6 +576,10 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         EZC,OMZ = Texture(imgZZ)
         EZC = EZC.astype(np.float64)
         OMZ = OMZ.astype(np.float64)
+        print("Rho Z = ",min(ListRHO))
+        print("La distance de Haussdorf Z = ",min(ListHauss))
+        print("Energie Z = ",EZC)
+        print("Homogénéité Z = ",OMZ)
     else:
     
         #for i in range(Z_refO.shape[0]):
@@ -582,6 +606,10 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
         EZC,OMZ = Texture(imgZZ)
         EZC = EZC.astype(np.float64)
         OMZ = OMZ.astype(np.float64)
+        print("Rho Z = ",min(ListRHO))
+        print("La distance de Haussdorf Z = ",min(ListHauss))
+        print("Energie Z = ",EZC)
+        print("Homogénéité Z = ",OMZ)
         
     #--------------------------------------------------------------------------------
     BeninListe =[]
@@ -656,6 +684,7 @@ def thj_fonction( imgX, imgY, imgZ,valX,valY,valZ):
     ligne = np.argmax(a)
     col = np.argmax(g)
     valeur_nash = MatJeu[ligne, col]
+    print("La valeur de nash = ",valeur_nash)
     if valeur_nash > 0:
         return 0
     elif valeur_nash < 0:

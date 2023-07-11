@@ -650,8 +650,7 @@ def SelectNodule(ConsultationID):
         cursor.execute(request_research, (ConsultationID, ))
         result = cursor.fetchone()[0]
         conn.close()
-        img = np.fromstring(result,dtype='float32')
-        img = img.reshape(64,64,64)
+        img = np.fromstring(result,dtype='float32').reshape(64,64,64)
         plt.imshow(img, "gray")
         plt.show()
         

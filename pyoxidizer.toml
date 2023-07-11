@@ -1,0 +1,7 @@
+[package]
+name = "EasyNodule"
+version = "0.1.0"
+
+[[targets]]
+path = "login.py"
+entry_point = "your_script:login"

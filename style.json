@@ -2,7 +2,7 @@
 	"QMainWindow":[
 		{
 			"tittle":"Easy Nodule",
-			"icon":"ressources/logo.png",
+			"icon":":/ressources/logo.png",
 			"frameless": true,
 			"transluscentBg": true,
 			"sizeGrip": "SizeGrip",
@@ -140,7 +140,8 @@
 							"homeBtn": "page_6",
 							"patientsBtn": "page_7",
                             "noduleBtn": "page_8",
-							"reportBtn": "page_9"
+							"reportBtn": "page_9",
+							"statBtn": "page_5"
 						}
 					]
 				}
@@ -184,7 +185,8 @@
 			"homeBtn",
 			"noduleBtn",
 			"patientsBtn",
-			"reportBtn"
+			"reportBtn",
+			"statBtn"
 		],
 		"Style":[{
 			"Active": "background-color: #2c313c;",

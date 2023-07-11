@@ -24,7 +24,7 @@ class Ui_FormSign(object):
                 FormSign.resize(617, 460)
                 FormSign.setWindowFlags(QtCore.Qt.FramelessWindowHint)
                 FormSign.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-                icon = QtGui.QIcon("ressources/logo.png")
+                icon = QtGui.QIcon(":/ressources/logo.png")
                 FormSign.setWindowIcon(icon)
                 self.widget = QtWidgets.QWidget(FormSign)
                 self.widget.setGeometry(QtCore.QRect(0, -10, 551, 451))
@@ -72,7 +72,7 @@ class Ui_FormSign(object):
                 self.widget.setObjectName("widget")
                 self.label = QtWidgets.QLabel(self.widget)
                 self.label.setGeometry(QtCore.QRect(30, 19, 511, 431))
-                self.label.setStyleSheet("border-image: url(ressources/bg.jpg);\n"
+                self.label.setStyleSheet("border-image: url(:/ressources/bg.jpg);\n"
         "border-radius : 20px;")
                 self.label.setText("")
                 self.label.setObjectName("label")
@@ -163,7 +163,7 @@ class Ui_FormSign(object):
         "color:rgba(255,255,255,230);\n"
         "padding-bottom:7px")
                 self.hospitalEdit.setObjectName("hospitalEdit")
-                self.wilayaEdit = QtWidgets.QLineEdit(self.widget)
+                self.wilayaEdit = QtWidgets.QComboBox(self.widget)
                 self.wilayaEdit.setGeometry(QtCore.QRect(50, 210, 200, 40))
                 font = QtGui.QFont()
                 font.setPointSize(10)
@@ -173,7 +173,20 @@ class Ui_FormSign(object):
         "border-bottom:2px solid rgba(105,118,132,255);\n"
         "color:rgba(255,255,255,230);\n"
         "padding-bottom:7px")
-                self.wilayaEdit.setText("")
+                #self.wilayaEdit.setText("")
+                #! Ajouter les noms des wilayas algériennes au ComboBox
+                wilayas = [
+                "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa",
+                "Biskra", "Béchar", "Blida", "Bouira", "Tamanrasset", "Tébessa",
+                "Tlemcen", "Tiaret", "Tizi Ouzou", "Alger", "Djelfa", "Jijel",
+                "Sétif", "Saïda", "Skikda", "Sidi Bel Abbès", "Annaba", "Guelma",
+                "Constantine", "Médéa", "Mostaganem", "M'Sila", "Mascara",
+                "Ouargla", "Oran", "El Bayadh", "Illizi", "Bordj Bou Arreridj",
+                "Boumerdès", "El Tarf", "Tindouf", "Tissemsilt", "El Oued",
+                "Khenchela", "Souk Ahras", "Tipaza", "Mila", "Aïn Defla",
+                "Naâma", "Aïn Témouchent", "Ghardaïa", "Relizane"
+                ]
+                self.wilayaEdit.addItems(wilayas)
                 self.wilayaEdit.setObjectName("wilayaEdit")
                 self.nameEdit = QtWidgets.QLineEdit(self.widget)
                 self.nameEdit.setGeometry(QtCore.QRect(50, 110, 200, 40))
@@ -225,7 +238,7 @@ class Ui_FormSign(object):
 
                 self.msg = QtWidgets.QMessageBox()
                 self.msg.setWindowTitle("Information")
-                self.msg.setWindowIcon(QtGui.QIcon("ressources/logo.png"))
+                self.msg.setWindowIcon(QtGui.QIcon(":/ressources/logo.png"))
                 
                 self.retranslateUi(FormSign)
                 QtCore.QMetaObject.connectSlotsByName(FormSign)
@@ -254,19 +267,30 @@ class Ui_FormSign(object):
                 self.ui.setupUi(self.window)
                 self.window.show()
         def ClinicianSignUp(self):
-                
+                wilaya_selected = self.wilayaEdit.itemText(self.wilayaEdit.currentIndex())
+                print(wilaya_selected)
                 #! Verify if all the fields are filled
-                if self.nameEdit.text()=="" or self.nameEdit_2.text()=="" or self.wilayaEdit.text()=="" or self.hospitalEdit.text()=="" or self.gradeEdit.text()=="" or self.usernameEdit.text()=="" or self.passwordEdit.text()=="" or self.passwordEdit_2.text()=="":
+                if self.nameEdit.text()=="" or self.nameEdit_2.text()=="" or self.hospitalEdit.text()=="" or self.gradeEdit.text()=="" or self.usernameEdit.text()=="" or self.passwordEdit.text()=="" or self.passwordEdit_2.text()=="":
                         self.msg.setText("Please fill all the fields")
                         self.msg.exec_()
                 elif ClinicianResearch(self.usernameEdit.text())== -1:
                         if self.passwordEdit.text() == self.passwordEdit_2.text():
-                                ClinicianInsert(self.nameEdit.text(), self.nameEdit_2.text(), self.wilayaEdit.text(), 
+                                ClinicianInsert(self.nameEdit.text(), self.nameEdit_2.text(), wilaya_selected, 
                                                 self.hospitalEdit.text(), self.gradeEdit.text(), 
                                                 self.passwordEdit.text(), self.usernameEdit.text()
                                                 )
                                 self.msg.setText("Your are account has been created")
                                 self.msg.exec_()
+                                wilaya_selected = "Adrar"
+                                self.wilayaEdit.setCurrentIndex(0)
+                                self.passwordEdit.clear()
+                                self.passwordEdit_2.clear()
+                                self.gradeEdit.clear()
+                                self.hospitalEdit.clear()
+                                self.usernameEdit.clear()
+                                self.nameEdit.clear()
+                                self.nameEdit_2.setDate(QDate(2000, 1, 1))
+                                
                                 
                                 
                                 

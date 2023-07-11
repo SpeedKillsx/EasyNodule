@@ -8,12 +8,15 @@ from matplotlib.figure import Figure
 import cv2
 import numpy as np
 
-class MainWindow(QMainWindow):   
+class MainWindow(QMainWindow):
+    index = 7
+    
     def __init__(self, image):
         super().__init__()
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("ressources/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
+
         # Créer une instance de la figure Matplotlib
         self.figure = Figure()
 
@@ -39,7 +42,8 @@ class MainWindow(QMainWindow):
         contours = self.detecter_contours(self.image)
 
         # Afficher l'image avec les contours
-        self.afficher_image_contours(self.image, contours)  
+        self.afficher_image_contours(self.image, contours)
+
     def detecter_contours(self, image):
        
 
@@ -48,17 +52,11 @@ class MainWindow(QMainWindow):
 
         # Détecter les contours avec l'algorithme de Canny
         edges = cv2.Canny(blurred, 90, 200)
-        kernel = np.ones((3, 3), np.uint8)
-        closed = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel)
+
         # Trouver les contours dans l'image
-        contours, _ = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        MIN_NODULE_AREA = 45
-        filtered_contours = []
-        for contour in contours:
-            area = cv2.contourArea(contour)
-            if area > MIN_NODULE_AREA:
-                filtered_contours.append(contour)
-        return filtered_contours
+        contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        return contours
 
     def afficher_image_contours(self, image, contours):
         # Créer une nouvelle figure Matplotlib
@@ -71,7 +69,7 @@ class MainWindow(QMainWindow):
 
         # Dessiner les contours sur la figure
         for contour in contours:
-            ax.plot(contour[:, 0, 0], contour[:, 0, 1], 'r', linewidth=2)
+            ax.plot(contour[:, 0, 0], contour[:, 0, 1], 'r', linewidth=5)
 
         # Mettre à jour le canevas
         self.canvas.draw()
@@ -91,34 +89,7 @@ if __name__ == '__main__':
 
     # Créer la fenêtre principale en passant l'image en argument
     window = MainWindow(image[32,:,:])
-    #window.setStyleSheet("background-color: rgb(31, 35, 42);")
-
-    # Appliquer un style spécifique à la barre d'outils
-    toolbar_style = """
-        QToolBar{
-        background-color:rgb(31, 35, 42);
-        border: black;
-
-        }
-        QToolButton:hover {
-            background-color: red;
-        }
-        QToolButton:checked {
-            background-color: green;
-        }
-        QMenu {
-            background-color: yellow;
-        }
-        
-       
-        
-        
-    """
-    window.toolbar.setStyleSheet(toolbar_style)
-     # Modifier le style des fonctionnalités individuelles
-    # Modifier le style des fonctionnalités individuelles
-    
-    window.setWindowTitle('Contours visualisation')
+    window.setWindowTitle('Nodule Visualisation')
 
     # Afficher la fenêtre principale
     window.show()

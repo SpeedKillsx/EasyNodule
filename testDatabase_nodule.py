@@ -42,29 +42,6 @@ def CoupleExiste(ConsultationID, PatientID):
     else:
         conn.close()
         return 1
-#? Get the Consultation ID using the name
-def ConsultationID(PatientName, ClinicianID, ConsultationDate):
-    """GET THE CONSULTATION ID
-
-    Args:
-        ConsultationID (str): ID of the consultation
-        PatientID (str): Id of the patient
-
-    Returns:
-        int: Integer Value, 1 if the patient passed the consultation, if not return -1
-    """
-    request_research = "SELECT * FROM Consultation where NameP = ? and idC = ?"
-    conn = sqlite3.connect(Database_path)
-    cursor = conn.cursor()
-    cursor.execute(request_research, (PatientName, ClinicianID, ConsultationDate))
-    result = cursor.fetchone()
-    #print("Le resultat = ", result)
-    if result is None:
-        conn.close()
-        return -1
-    else:
-        conn.close()
-        return 1
 #? Insert a nodule in the database
 def NoduleInsert(ConsultationID, PatientID, NoduleArray, NoduleClassification):
     request_insert = "INSERT INTO Nodule (idConsultation, idP, NoduleArray, NoduleClassification) VALUES (?,?,?,?)"

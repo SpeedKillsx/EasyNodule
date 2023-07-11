@@ -81,7 +81,7 @@ class Ui_Form(object):
                
                 self.label = QtWidgets.QLabel(self.widget)
                 self.label.setGeometry(QtCore.QRect(30, 19, 300, 431))
-                self.label.setStyleSheet("border-image: url(ressources/bg.jpg);\n"
+                self.label.setStyleSheet("border-image: url(:/ressources/bg.jpg);\n"
         "border-radius : 20px;")
                 self.label.setText("")
                 self.label.setObjectName("label")
@@ -106,7 +106,7 @@ class Ui_Form(object):
                 self.label_4.setFont(font)
                 self.label_4.setStyleSheet("color: rgba(255,255,255,210);")
                 self.label_4.setText("")
-                self.label_4.setPixmap(QtGui.QPixmap("ressources/logo.png"))
+                self.label_4.setPixmap(QtGui.QPixmap(":/ressources/logo.png"))
                 self.label_4.setScaledContents(True)
                 self.label_4.setObjectName("label_4")
                 self.usernameEdit = QtWidgets.QLineEdit(self.widget)
@@ -164,7 +164,7 @@ class Ui_Form(object):
         "")
                 self.emailBtn.setText("")
                 icon = QtGui.QIcon()
-                icon.addPixmap(QtGui.QPixmap("ressources/gmail.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                icon.addPixmap(QtGui.QPixmap(":/ressources/gmail.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.emailBtn.setIcon(icon)
                 self.emailBtn.setIconSize(QtCore.QSize(24, 24))
                 self.emailBtn.setObjectName("emailBtn")
@@ -177,7 +177,7 @@ class Ui_Form(object):
                 self.callBtn.setStyleSheet("background-color: rgba(0, 0, 0,0);")
                 self.callBtn.setText("")
                 icon1 = QtGui.QIcon()
-                icon1.addPixmap(QtGui.QPixmap("ressources/appel-telephonique.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                icon1.addPixmap(QtGui.QPixmap(":/ressources/appel-telephonique.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.callBtn.setIcon(icon1)
                 self.callBtn.setIconSize(QtCore.QSize(24, 24))
                 self.callBtn.setObjectName("callBtn")
@@ -201,7 +201,7 @@ class Ui_Form(object):
                 self.msg = QtWidgets.QMessageBox()
                 
                 self.msg.setWindowTitle("Information")
-                self.msg.setWindowIcon(QtGui.QIcon("ressources/logo.png"))
+                self.msg.setWindowIcon(QtGui.QIcon(":/ressources/logo.png"))
                 #self.msg.setStyleSheet("border-image: url(:/images/bg.jpg);")
                 
                 

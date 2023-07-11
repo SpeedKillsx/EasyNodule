@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="images">
+  <qresource prefix="ressources">
     <file>sidentifier.png</file>
     <file>appel-telephonique.png</file>
     <file>gmail.png</file>

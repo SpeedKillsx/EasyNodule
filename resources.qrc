@@ -1,5 +1,15 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icon/statistique.png</file>
+    <file>icon/statistiques.png</file>
+    <file>ressources/appel-telephonique.png</file>
+    <file>ressources/bg.jpg</file>
+    <file>ressources/easy_nodule_1_-removebg-preview.png</file>
+    <file>ressources/gmail.png</file>
+    <file>ressources/logo.ico</file>
+    <file>ressources/logo.png</file>
+    <file>ressources/poumons.png</file>
+    <file>ressources/sidentifier.png</file>
     <file>icon/activity.svg</file>
     <file>icon/airplay.svg</file>
     <file>icon/alert-circle.svg</file>
@@ -287,10 +297,5 @@
     <file>icon/zap-off.svg</file>
     <file>icon/zoom-in.svg</file>
     <file>icon/zoom-out.svg</file>
-  </qresource>
-  <qresource prefix="images">
-    <file>logo.png</file>
-    <file>poumons.png</file>
-    <file>easy_nodule_1_-removebg-preview.png</file>
   </qresource>
 </RCC>

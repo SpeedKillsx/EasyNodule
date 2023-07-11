@@ -1,0 +1,4 @@
+"C:\Program Files\Python37\Scripts\pyuic5.exe" -x "C:\Users\21379\Desktop\EasyNodule-masterV1505\interface.ui" -o "C:\Users\21379\Desktop\EasyNodule-masterV1505\ui_interface.py"
+
+pyuic5 interface.ui -o interface_ui.py
+pyrcc5 resources.qrc -o resources_rc.py

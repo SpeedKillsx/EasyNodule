@@ -45,8 +45,8 @@ def MakePDF(pname , idc ,idp ,pwilaya , pphone,pemail,modc,clic,rep,cname,cid ):
 
   config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
   current_date = datetime.now().strftime("%Y%m%d")
-  output_pdf = f'Reports\\{id_cons}_{patient_name}_{current_date}.pdf'
+  output_pdf = f'PDF\\{id_cons}_{patient_name}_{current_date}.pdf'
   pdfkit.from_string(output_text, output_pdf, configuration=config, css='PDF\\invoice.css')
 
 
-#MakePDF("AZIZZOU","PC14447","P4474","ALger","055477447","aziz@gmail.com","benin","benin","iudhfoui osdifh poi osqdifj oisdqj fpoiqsd f  oqspdif soqdifjqos df sdqoifqs pdof sddsqfs sdqfqsdf dsqfqsdf qsdf","AMINE","C44784")
+#MakePDF("Az mad","PC14447","P4474","ALger","055477447","aziz@gmail.com","benin","benin","iudhfoui osdifh poi osqdifj oisdqj fpoiqsd f  oqspdif soqdifjqos df sdqoifqs pdof sddsqfs sdqfqsdf dsqfqsdf qsdf","AMINE","C44784")
