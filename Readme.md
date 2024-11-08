@@ -1,4 +1,13 @@
 # EasyNodule - AI-Driven Pulmonary Nodule Classification
+<div align="center">
+  <a href="#">
+    <img width="100%" src="ressources/logo.png" alt="EasyNodule Logo">
+  </a>
+
+<div>
+    <a href="https://www.kaggle.com/datasets/yidhir123/lungcancernodules-segmented"><img src="https://kaggle.com/static/images/open-in-kaggle.svg" alt="Open Dataset In Kaggle"></a>
+  </div>
+  <br>
 
 Welcome to **EasyNodule** – a powerful desktop application designed to help medical professionals classify pulmonary nodules detected in CT scans efficiently and accurately. EasyNodule leverages state-of-the-art deep learning models to streamline lung cancer diagnostics, ensuring early detection and providing specialists with advanced tools for patient management.
 
