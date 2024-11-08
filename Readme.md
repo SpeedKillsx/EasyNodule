@@ -62,7 +62,7 @@ Developed as part of a Master's thesis project at the University of Science and 
    ```
 3. Install the dependencies:
    ```bash
-   pip install -r requirements.txt # Ensure cairo is included as a dependency for PDF rendering
+   pip install -r requirements.txt # Ensure cairo is included as a dependency for PDF rendering and install gtk3-runtime
    ```
 4. Launch the application:
    ```bash
