@@ -15,7 +15,10 @@ Welcome to **EasyNodule** – a powerful desktop application designed to help me
 
 ## About EasyNodule
 
-EasyNodule is a desktop application aimed at supporting clinicians and specialists in the early detection of lung cancer. It uses **NoduleCaps32**, an advanced capsule network model developed by the team, to classify nodules as benign or malignant based on CT scan imagery. This tool allows clinicians to diagnose lung cancer effectively at an early stage, providing crucial information to enable timely medical interventions.
+EasyNodule is a desktop application aimed at supporting clinicians and specialists in the early detection of lung cancer. It uses an advanced capsule network model **NoduleCaps32** developed by us from scratch based on the original [article](
+https://doi.org/10.48550/arXiv.1710.09829). By analyzing segmented CT scan imagery, EasyNodule offers a streamlined workflow for diagnostic decision-making, empowering medical professionals to diagnose lung cancer in its earliest stages and improve patient outcomes.
+
+
 
 **Authors:**
 
