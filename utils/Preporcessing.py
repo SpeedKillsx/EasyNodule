@@ -312,6 +312,7 @@ def calcRho(image_reference, image_test2):
 
 #LA TEXTURE
 from skimage.feature import greycomatrix, greycoprops
+
 from tensorflow.python.ops.numpy_ops import np_config
 np_config.enable_numpy_behavior()
 

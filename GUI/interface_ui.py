@@ -1758,5 +1758,5 @@ class Ui_MainWindow(object):
         self.closeNotificationBtn.setToolTip(_translate("MainWindow", "Close notification"))
         self.label_15.setText(_translate("MainWindow", "Copyright KOULAL_LABCHRI"))
 from Custom_Widgets.Widgets import QCustomSlideMenu, QCustomStackedWidget
-import res_rc
+import GUI.res_rc
 import GUI.resources_rc as resources_rc
