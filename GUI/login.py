@@ -3,9 +3,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide2 import *
 from Custom_Widgets.Widgets import *
 import sys,res
-from sign import Ui_FormSign
-from Database_methods import *
-from interface_ui import *
+from GUI.sign import Ui_FormSign
+from utils.Database_methods import *
+from GUI.interface_ui import *
 from main import *
 """Tests:
 - ClinicianLogin: work

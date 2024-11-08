@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys,res
 import os
-from Database_methods import *
+from utils.Database_methods import *
 from main import *
 class Ui_FormSign(object):
         
@@ -261,7 +261,7 @@ class Ui_FormSign(object):
                 self.label_7.setText(_translate("FormSign", "Enter Your Information"))
                 self.passwordEdit_2.setPlaceholderText(_translate("FormSign", "Confirm Password"))
         def openWindow2(self):
-                from login import Ui_Form
+                from GUI.login import Ui_Form
                 self.window = QtWidgets.QWidget()
                 self.ui = Ui_Form()
                 self.ui.setupUi(self.window)
