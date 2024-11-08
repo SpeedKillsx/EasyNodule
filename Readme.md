@@ -16,7 +16,7 @@ Welcome to **EasyNodule** – a powerful desktop application designed to help me
 ## About EasyNodule
 
 EasyNodule is a desktop application aimed at supporting clinicians and specialists in the early detection of lung cancer. It uses an advanced capsule network model **NoduleCaps32** developed by us from scratch based on the original [article](
-https://doi.org/10.48550/arXiv.1710.09829). By analyzing segmented CT scan imagery, EasyNodule offers a streamlined workflow for diagnostic decision-making, empowering medical professionals to diagnose lung cancer in its earliest stages and improve patient outcomes.
+https://doi.org/10.48550/arXiv.1710.09829). EasyNodule leverages a [dataset](https://www.kaggle.com/datasets/yidhir123/lungcancernodules-segmented) of segmented CT scans available on Kaggle to train and validate the model. By analyzing  these segmented CT scan, EasyNodule offers a streamlined workflow for diagnostic decision-making, empowering medical professionals to diagnose lung cancer in its earliest stages and improve patient outcomes.
 
 
 
@@ -31,19 +31,12 @@ Developed as part of a Master's thesis project at the University of Science and 
 
 - **Personal Account System**: Users can create secure personal accounts to store and access data safely.
 - **Patient Management and Database Storage**: Manage patient information and store data securely for easy access.
-- **Nodule Classification Using Deep Learning**: Utilize **NoduleCaps32**, a transparent and reliable model developed for pulmonary nodule classification.
-- **Semi-3D Nodule Classification**: Extract insights from semi-3D CT images for enhanced analysis and diagnosis.
+- **Nodule Classification Using Deep Learning**: Utilize **NoduleCaps32**, a CapsNet model developed for pulmonary nodule classification.
+- **Semi-3D Nodule Classification**: Extract insights from 3D segmented CT images for enhanced analysis and diagnosis.
 - **Medical Report Generation**: Generate and store detailed medical reports in PDF format.
 - **Statistics Dashboard**: Visualize key patient and diagnostic data to aid in analysis and decision-making.
 
 ## Installation
-
-### Prerequisites
-
-- **Python**
-- **TensorFlow 2.x**
-- **PyQt5** for the GUI
-- **SQLite** for database management
 
 ### Steps to Install
 
@@ -72,7 +65,7 @@ To get started with EasyNodule, follow these steps:
 
 1. **Sign Up / Login**: Create an account or login with your existing credentials to access the application features.
 2. **Add a Patient**: Register patient information (name, age, gender, etc.) for future reference and classification.
-3. **Select Patient & Upload CT Scan**: Select the patient and upload a CT scan for nodule classification.
+3. **Select Patient & Upload segmented CT Scan**: Select the patient and upload a segmented CT scan for nodule classification.
 4. **Classify Nodules**: Use the integrated deep learning model to classify nodules as benign or malignant. You may select different classification methods (strict, majority, or threshold-based) depending on the analysis needed.
 5. **Generate Reports**: Generate a PDF report including classification results, assessments, and recommendations.
 6. **View Statistics**: Visualize trends and patient data, including the prevalence of malignant nodules by region and risk factors such as smoking and family history.
