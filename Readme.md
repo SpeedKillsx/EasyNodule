@@ -107,7 +107,7 @@ We welcome contributions from the community. If you wish to contribute, please f
 
 We hope EasyNodule helps improve the diagnosis and treatment of lung conditions. If you have any questions or need support, feel free to reach us at [koulalyidhiraghiles@gmail.com](mailto:koulalyidhiraghiles@gmail.com) or [amayaslabchri88@gmail.com](mailto:amayaslabchri88@gmail.com).
 
-**YouTube Presentation**: [Watch Our Youtube Video]\(https://youtu.be/DerCbbJpCoQ)
+**YouTube Presentation**: [Watch Our Youtube Video](https://youtu.be/DerCbbJpCoQ)
 
 Happy diagnosing!
 
