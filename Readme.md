@@ -80,7 +80,7 @@ To get started with EasyNodule, follow these steps:
 5. **Generate Reports**: Generate a PDF report including classification results, assessments, and recommendations.
 6. **View Statistics**: Visualize trends and patient data, including the prevalence of malignant nodules by region and risk factors such as smoking and family history.
 
-For more details, please refer to the comprehensive user guide included in the repository or access the [EasyNodule User Guide]\([link to the guide](https://drive.google.com/file/d/17CHbUR6hFuHHutq4315FIcD0YL-yEEI3/view?usp=sharing)).
+For more details, please refer to the comprehensive user guide included in the repository or access the [EasyNodule User Guide](https://drive.google.com/file/d/17CHbUR6hFuHHutq4315FIcD0YL-yEEI3/view?usp=sharing).
 
 ## Deep Learning Models
 
