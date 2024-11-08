@@ -1,8 +1,8 @@
 import os
 import sys
 from PySide2 import *
-from interface_ui import *
-from invoice import MakePDF
+from GUI.interface_ui import *
+from utils.invoice import MakePDF
 from Custom_Widgets.Widgets import *
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -10,8 +10,8 @@ from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 import numpy as np
 from PIL import Image
-from Preporcessing import *
-from Database_methods import *
+from utils.Preporcessing import *
+from utils.Database_methods import *
 import pygame
 import sqlite3
 import re
@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
             print(result)
             
             # Charger le fichier audio
-            pygame.mixer.music.load("notificationsound.mp3")
+            pygame.mixer.music.load("ressources/notificationsound.mp3")
 
             # Lancer la lecture
             pygame.mixer.music.play()
@@ -525,7 +525,7 @@ class MainWindow(QMainWindow):
     def showNodule(self):
         temp = self.scan
         import subprocess
-        command = 'contours.py ' # Remplacez 'dir' par la commande de votre choix
+        command = 'utils/contours.py ' # Remplacez 'dir' par la commande de votre choix
         # Exécute la commande CMD et récupère la sortie
         #! Check if a ct-scan file was selected
         if self.scan !="":
@@ -542,7 +542,7 @@ class MainWindow(QMainWindow):
         self.ui.label_waiting.setText("")  
     
     def get_statistics(self):
-        self.conn = sqlite3.connect("NoduleDataBase.db")
+        self.conn = sqlite3.connect("utils/NoduleDataBase.db")
         self.cursor = self.conn.cursor()
         self.cursor.execute("SELECT WilayaP, COUNT(*) FROM Patient WHERE idP in (SELECT idP from Nodule where NoduleClassification == '1') GROUP BY WilayaP")
         results = self.cursor.fetchall()
@@ -552,7 +552,7 @@ class MainWindow(QMainWindow):
         self.conn.close()
         return stats
     def update_graph(self):
-        self.conn = sqlite3.connect("NoduleDataBase.db")
+        self.conn = sqlite3.connect("utils/NoduleDataBase.db")
         self.cursor = self.conn.cursor()
         # Récupérer les données de la base de données
         self.cursor.execute("""
@@ -799,7 +799,7 @@ class MainWindow(QMainWindow):
         # Message
         self.msg = QtWidgets.QMessageBox()
         self.msg.setWindowTitle("Information")
-        self.msg.setWindowIcon(QtGui.QIcon("logo.png"))
+        self.msg.setWindowIcon(QtGui.QIcon("ressources/logo.png"))
         #! Patient ID save and Name and all information
         self.PatientID = ""
         self.PatientIDTemp = ""
@@ -872,7 +872,7 @@ class MainWindow(QMainWindow):
         self.horizontalLayout_55.addWidget(self.canvasstat1)
         
         # Se connecter à la base de données
-        self.conn = sqlite3.connect("NoduleDataBase.db")
+        self.conn = sqlite3.connect("utils/NoduleDataBase.db")
         self.cursor = self.conn.cursor()
         # Obtenir les statistiques à partir de la base de données
         self.stats = self.get_statistics()
@@ -1000,7 +1000,7 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     # Set the application icon
-    app.setWindowIcon(QIcon('C://Users//21379//Desktop//EasyNodule-masterV1505//logo.png'))
+    app.setWindowIcon(QIcon('ressources/logo.png'))
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())     

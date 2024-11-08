@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-from Database_methods import *
+from utils.Database_methods import *
 from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 class Ui_MainWindow(object):

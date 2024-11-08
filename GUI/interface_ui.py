@@ -1759,4 +1759,4 @@ class Ui_MainWindow(object):
         self.label_15.setText(_translate("MainWindow", "Copyright KOULAL_LABCHRI"))
 from Custom_Widgets.Widgets import QCustomSlideMenu, QCustomStackedWidget
 import res_rc
-import resources_rc
+import GUI.resources_rc as resources_rc
