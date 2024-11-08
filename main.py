@@ -1,6 +1,8 @@
 import os
 import sys
-from PySide2 import *
+from PySide6 import *
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget 
+from PyQt5.QtGui import QIcon
 from GUI.interface_ui import *
 from utils.invoice import MakePDF
 from Custom_Widgets.Widgets import *
@@ -15,6 +17,9 @@ from utils.Database_methods import *
 import pygame
 import sqlite3
 import re
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 class MainWindow(QMainWindow):
     #! Ajout de la verification de email
     def isValid(self, email):
@@ -854,9 +859,7 @@ class MainWindow(QMainWindow):
         
 
         self.canvas = FigureCanvas(self.figure)
-        #end of canva
-        
-        #add canva
+    
         self.horizontalLayout_44.addWidget(self.canvas)
         
         #matplolibStat
