@@ -86,6 +86,12 @@ For more details, please refer to the comprehensive user guide included in the r
 
 EasyNodule employs **NoduleCaps32**, a customized Capsule Network model inspired by Hinton's capsule network concept. This model is specifically designed for handling the complexity of 3D medical imaging data, extracting features from CT scans, and improving the accuracy of pulmonary nodule classification.
 
+<div align="center">
+  <a href="#">
+    <img width="25%" src="ressources/capsnet32.png" alt="NoduleCaps32 Architecture">
+  </a>
+</div>  
+
 The final classification decision is made by:
 
 - **Strict Classification**: Requires agreement among all models.
