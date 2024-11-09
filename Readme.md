@@ -88,7 +88,7 @@ EasyNodule employs **NoduleCaps32**, a customized Capsule Network model inspired
 
 <div align="center">
   <a href="#">
-    <img width="25%" src="ressources/capsnet32.png" alt="NoduleCaps32 Architecture">
+    <img width="60%" src="ressources/capsnet32.png" alt="NoduleCaps32 Architecture">
   </a>
 </div>  
 
